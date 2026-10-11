@@ -19,7 +19,7 @@ export default function Footer() {
   };
 
   return (
-    <footer data-theme="light" className="relative bg-[#F9F9F7] text-neutral-900 px-6 sm:px-12 py-6 sm:py-8 select-none min-h-screen flex flex-col justify-between border-t border-neutral-300 overflow-visible">
+    <footer data-theme="light" className="relative bg-[#F4F4F0] text-neutral-900 px-6 sm:px-12 py-6 sm:py-8 select-none min-h-screen flex flex-col justify-between border-t border-neutral-300 overflow-visible">
       <div className="max-w-8xl mx-auto w-full flex-1 flex flex-col justify-between">
 
         {/* Top Header Row matching Screenshot */}
