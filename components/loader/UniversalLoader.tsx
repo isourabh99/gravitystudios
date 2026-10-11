@@ -13,7 +13,7 @@ export interface LoaderConfig {
 export const LOADER_PAGE_CONFIGS: Record<string, LoaderConfig> = {
   "/": {
     topLeft: [
-      "Studio Gravity",
+      "Gravity Studios",
       "Design, systems & interactive engineering",
       "Digital experiences for the forward-thinking",
     ],
@@ -39,7 +39,7 @@ export const LOADER_PAGE_CONFIGS: Record<string, LoaderConfig> = {
   },
   default: {
     topLeft: [
-      "Studio Gravity",
+      "Gravity Studios",
       "Interactive media laboratory",
       "Connecting nodes...",
     ],
@@ -47,7 +47,7 @@ export const LOADER_PAGE_CONFIGS: Record<string, LoaderConfig> = {
       "Identity, websites, real-time 3D",
       "Calibrating layout and typography...",
       "Connecting worldwide...",
-      "Welcome to Studio Gravity.",
+      "Welcome to Gravity Studios.",
     ],
   },
 };
@@ -137,7 +137,7 @@ export default function UniversalLoader({
           {/* 2. CENTER: Animated 'gravity™' Logo */}
           <div className="relative z-10 flex flex-col items-center justify-center pointer-events-none">
             <div className="inline-flex items-center space-x-[2px] sm:space-x-1 select-none py-1">
-              {"gravity".split("").map((letter, idx) => (
+              {"gravity studios".split("").map((letter, idx) => (
                 <span
                   key={idx}
                   className="font-mg12-regular text-base sm:text-lg md:text-xl font-normal text-white inline-block"

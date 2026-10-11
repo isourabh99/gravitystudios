@@ -245,7 +245,7 @@ export default function ContactPage() {
 
                 {/* Row 10: Disclaimer */}
                 <p className="text-xs font-mg12-regular text-neutral-500 leading-relaxed pt-2">
-                  By submitting this form, you confirm that you have read and understood Studio Gravity&apos;s{" "}
+                  By submitting this form, you confirm that you have read and understood Gravity Studios&apos;s{" "}
                   <a href="/#legal" className="underline hover:text-black">
                     Privacy Policy
                   </a>

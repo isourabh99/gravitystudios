@@ -18,7 +18,7 @@ export default function GravityLogo({
 }: GravityLogoProps) {
   const logoContent = (
     <div className={`relative inline-flex items-center justify-center select-none group ${className}`}>
-      {/* Brand Text 'gravity' */}
+      {/* Brand Text 'gravity studios' */}
       <span
         className={`font-mg12-bold ${textSize} font-bold tracking-wide relative z-10 leading-tight py-1 ${
           isDark ? "text-black" : "text-white"
@@ -27,7 +27,7 @@ export default function GravityLogo({
           fontFamily: "var(--font-mg12-bold), Inter, var(--font-sans), system-ui, sans-serif",
         }}
       >
-        gravity
+        gravity studios
       </span>
 
       {/* Orbiting Circle Dot around the text */}
@@ -45,7 +45,7 @@ export default function GravityLogo({
 
   if (showLink) {
     return (
-      <Link href="/" className="inline-flex items-center" aria-label="Gravity Home">
+      <Link href="/" className="inline-flex items-center" aria-label="Gravity Studios Home">
         {logoContent}
       </Link>
     );
