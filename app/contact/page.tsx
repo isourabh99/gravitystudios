@@ -89,13 +89,13 @@ export default function ContactPage() {
                 <span>ISOURABHSONI99@GMAIL.COM</span>
               </a>
               <a
-                href="https://wa.me/918871795472"
+                href="https://wa.me/919109270472"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-2 hover:text-[#ED3327] transition-colors"
               >
                 <span>→</span>
-                <span>WHATSAPP • +91 8871795472</span>
+                <span>WHATSAPP • +91 9109270472</span>
               </a>
               <a
                 href="https://linkedin.com/in/isourabh99"

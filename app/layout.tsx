@@ -99,7 +99,7 @@ const jsonLd = {
         "@type": "ContactPoint",
         contactType: "customer support",
         email: "isourabhsoni99@gmail.com",
-        telephone: "+91-8871795472",
+        telephone: "+91-9109270472",
       },
       sameAs: [
         "https://linkedin.com/in/isourabh99",

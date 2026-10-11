@@ -102,7 +102,7 @@ export default function Footer() {
                 <ScrambleText text="isourabhsoni99@gmail.com" hoverColor="#ED3327" />
               </a>
               <p className="font-mono text-sm sm:text-[14px] text-neutral-600">
-                Whatsapp : +91 8871795472
+                Whatsapp : +91 9109270472
               </p>
             </div>
           </div>
