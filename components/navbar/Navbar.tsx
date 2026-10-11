@@ -117,20 +117,13 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`group relative inline-block transition-colors duration-200 ${
+                  className={`inline-block transition-colors duration-200 ${
                     isDarkBg
                       ? "text-neutral-300 hover:text-white"
                       : "text-neutral-700 hover:text-black"
                   }`}
                 >
-                  <span className="relative inline-block transition-transform duration-200 group-hover:translate-x-1.5">
-                    {link.name}
-                    <span
-                      className={`absolute -bottom-0.5 left-0 w-full h-[1px] ${
-                        isDarkBg ? "bg-white" : "bg-black"
-                      } origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-linear pointer-events-none`}
-                    />
-                  </span>
+                  {link.name}
                 </Link>
               ))}
             </div>
@@ -145,20 +138,13 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`group relative inline-block transition-colors duration-200 ${
+                  className={`inline-block transition-colors duration-200 ${
                     isDarkBg
                       ? "text-neutral-300 hover:text-white"
                       : "text-neutral-700 hover:text-black"
                   }`}
                 >
-                  <span className="relative inline-block transition-transform duration-200 group-hover:translate-x-1.5">
-                    {link.name}
-                    <span
-                      className={`absolute -bottom-0.5 left-0 w-full h-[1px] ${
-                        isDarkBg ? "bg-white" : "bg-black"
-                      } origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-linear pointer-events-none`}
-                    />
-                  </span>
+                  {link.name}
                 </Link>
               ))}
             </div>
