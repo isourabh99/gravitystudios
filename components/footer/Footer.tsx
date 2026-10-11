@@ -101,9 +101,14 @@ export default function Footer() {
               <a href="mailto:isourabhsoni99@gmail.com" className="block">
                 <ScrambleText text="isourabhsoni99@gmail.com" hoverColor="#ED3327" />
               </a>
-              <p className="font-mono text-sm sm:text-[14px] text-neutral-600">
-                Whatsapp : +91 9109270472
-              </p>
+              <a
+                href="https://wa.me/919109270472"
+                target="_blank"
+                rel="noreferrer"
+                className="block font-mono text-sm sm:text-[14px] text-neutral-600 hover:text-[#ED3327] transition-colors"
+              >
+                <ScrambleText text="Whatsapp • +91 9109270472" hoverColor="#ED3327" />
+              </a>
             </div>
           </div>
 

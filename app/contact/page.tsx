@@ -86,7 +86,7 @@ export default function ContactPage() {
                 className="flex items-center gap-2 hover:text-[#ED3327] transition-colors"
               >
                 <span>→</span>
-                <span>ISOURABHSONI99@GMAIL.COM</span>
+                <span className="lowercase">isourabhsoni99@gmail.com</span>
               </a>
               <a
                 href="https://wa.me/919109270472"
@@ -95,7 +95,7 @@ export default function ContactPage() {
                 className="flex items-center gap-2 hover:text-[#ED3327] transition-colors"
               >
                 <span>→</span>
-                <span>WHATSAPP • +91 9109270472</span>
+                <span>Whatsapp • +91 9109270472</span>
               </a>
               <a
                 href="https://linkedin.com/in/isourabh99"
@@ -104,7 +104,7 @@ export default function ContactPage() {
                 className="flex items-center gap-2 hover:text-[#ED3327] transition-colors"
               >
                 <span>→</span>
-                <span>LINKEDIN</span>
+                <span>LinkedIn</span>
               </a>
             </div>
           </div>
