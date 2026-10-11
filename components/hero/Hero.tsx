@@ -65,7 +65,7 @@ export default function Hero() {
   }, [scrollY]);
 
   return (
-    <section data-theme="dark" className="relative w-full h-screen min-h-[700px] bg-black text-neutral-100 flex flex-col justify-between px-6 sm:px-12 pt-28 pb-6 select-none overflow-hidden">
+    <section data-theme="dark" className="relative w-full h-[100dvh] sm:min-h-[700px] bg-black text-neutral-100 flex flex-col justify-between px-5 sm:px-12 pt-20 sm:pt-28 pb-5 sm:pb-8 select-none overflow-hidden">
       {/* Light Ambient Red Atmosphere behind Robot */}
       <div className="absolute right-0 top-1/4 bottom-0 w-full sm:w-[65%] pointer-events-none z-0 overflow-hidden opacity-80">
         <div className="absolute -right-20 top-10 w-[600px] h-[600px] rounded-full bg-red-700/15 blur-[160px]" />
@@ -89,7 +89,7 @@ export default function Hero() {
         </div>
 
         {/* Bottom Copyright & UTC Bar */}
-        <div className="pointer-events-auto">
+        <div className="pointer-events-auto pb-1.5 sm:pb-0">
           <CopyrightBar variant="hero" style={{ opacity: metaOpacity, y: metaY, pointerEvents }} />
         </div>
       </div>

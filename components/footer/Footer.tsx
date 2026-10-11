@@ -5,10 +5,21 @@ import GravityLogo from "@/components/logo/GravityLogo";
 import CopyrightBar from "@/components/ui/CopyrightBar";
 import ScrambleText from "@/components/ui/ScrambleText";
 import Link from "next/link";
+import { useSmoothScroll } from "@/components/providers/SmoothScrollProvider";
 
 export default function Footer() {
+  const lenis = useSmoothScroll();
+
+  const scrollToTop = () => {
+    if (lenis) {
+      lenis.scrollTo(0, { duration: 1.2 });
+    } else if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
-    <footer data-theme="light" className="relative bg-[#F9F9F7] text-neutral-900 px-6 sm:px-12 py-6 sm:py-8 select-none h-screen max-h-screen flex flex-col justify-between border-t border-neutral-300 overflow-hidden">
+    <footer data-theme="light" className="relative bg-[#F9F9F7] text-neutral-900 px-6 sm:px-12 py-6 sm:py-8 select-none min-h-screen flex flex-col justify-between border-t border-neutral-300 overflow-visible">
       <div className="max-w-8xl mx-auto w-full flex-1 flex flex-col justify-between">
 
         {/* Top Header Row matching Screenshot */}
@@ -128,22 +139,41 @@ export default function Footer() {
 
         </div>
 
-        {/* Bottom Footer Section: Logo + CopyrightBar (Reveals when end of website is reached) */}
-        <div className="pt-4 border-t border-neutral-300 space-y-3">
+        {/* Bottom Footer Section: Logo + CopyrightBar */}
+        <div className="pt-4 border-t border-neutral-300 space-y-4 mt-8 lg:mt-0">
           <div className="flex items-center justify-between">
             <GravityLogo showLink={true} isDark={true} textSize="text-xl sm:text-2xl" />
+
+            {/* Circular Back To Top Button on right of Logo (above CopyrightBar) */}
+            <button
+              type="button"
+              onClick={scrollToTop}
+              className="group relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black text-white hover:bg-[#ED3327] flex items-center justify-center transition-colors duration-300 cursor-pointer overflow-hidden shadow-sm select-none shrink-0"
+              aria-label="Back to top"
+            >
+              <div className="relative w-4 h-4 overflow-hidden flex items-center justify-center">
+                {/* Primary arrow sliding up out of view on hover */}
+                <span className="inline-flex items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-full group-hover:opacity-0">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                  </svg>
+                </span>
+                {/* Duplicate arrow sliding up into view from bottom on hover */}
+                <span className="absolute inset-0 inline-flex items-center justify-center translate-y-full opacity-0 transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-y-0 group-hover:opacity-100">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                  </svg>
+                </span>
+              </div>
+            </button>
           </div>
 
-          {/* CopyrightBar: Hidden until website bottom is reached */}
-          <div className="pt-1">
+          <div className="pt-2">
             <CopyrightBar variant="footer" />
           </div>
         </div>
 
       </div>
-
-      {/* Sentinel for detecting website bottom */}
-      <div id="footer-end-sentinel" className="w-full h-[1px] pointer-events-none -mt-[1px]" />
     </footer>
   );
 }
