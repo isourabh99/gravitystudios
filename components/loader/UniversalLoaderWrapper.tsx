@@ -17,7 +17,6 @@ export default function UniversalLoaderWrapper({
   children: React.ReactNode;
 }) {
   const [loading, setLoading] = useState(true);
-  const [isHomeReload, setIsHomeReload] = useState(true);
   const pathname = usePathname();
   const lenis = useSmoothScroll();
   const isFirstMount = useRef(true);
@@ -26,14 +25,11 @@ export default function UniversalLoaderWrapper({
   useEffect(() => {
     if (isFirstMount.current) {
       isFirstMount.current = false;
-      // If website is on homepage on initial load / reload:
-      setIsHomeReload(pathname === "/" || pathname === "");
       setLoading(true);
       return;
     }
 
-    // Client-side route changes (redirect to another page)
-    setIsHomeReload(false);
+    // Client-side route changes
     setLoading(true);
   }, [pathname]);
 
@@ -51,13 +47,12 @@ export default function UniversalLoaderWrapper({
     <UniversalLoaderContext.Provider value={{ isLoading: loading }}>
       {loading && (
         <UniversalLoader
-          key={`${pathname}-${isHomeReload ? "home-reload" : "route"}`}
+          key={pathname}
           pathname={pathname}
-          isHomeReload={isHomeReload}
           onComplete={() => setLoading(false)}
         />
       )}
-      <div style={{ visibility: loading && (pathname === "/" || pathname === "") ? "hidden" : "visible" }}>
+      <div className="w-full">
         {children}
       </div>
     </UniversalLoaderContext.Provider>

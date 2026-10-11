@@ -55,7 +55,7 @@ export default function Footer() {
           {/* Column 2: Navigation & Latest Projects with ScrambleText hover */}
           <div className="lg:col-span-3 space-y-6">
             <div className="space-y-2">
-              <span className="block text-[13px] sm:text-sm font-mg12-regular font-light tracking-[0.2em] text-neutral-500 uppercase select-none">
+              <span className="block text-[13px] sm:text-sm font-mg12-regular font-light tracking-[0.2em] text-neutral-600 uppercase select-none">
                 NAVIGATION
               </span>
               <div className="space-y-1.5 flex flex-col items-start">
@@ -74,7 +74,7 @@ export default function Footer() {
             </div>
 
             <div className="space-y-2">
-              <span className="block text-[13px] sm:text-sm font-mg12-regular font-light tracking-[0.2em] text-neutral-500 uppercase select-none">
+              <span className="block text-[13px] sm:text-sm font-mg12-regular font-light tracking-[0.2em] text-neutral-600 uppercase select-none">
                 LATEST PROJECTS
               </span>
               <div className="space-y-1.5 flex flex-col items-start">
@@ -94,7 +94,7 @@ export default function Footer() {
 
           {/* Column 3: Contact with ScrambleText hover */}
           <div className="lg:col-span-3 space-y-2">
-            <span className="block text-[13px] sm:text-sm font-mg12-regular font-light tracking-[0.2em] text-neutral-500 uppercase select-none">
+            <span className="block text-[13px] sm:text-sm font-mg12-regular font-light tracking-[0.2em] text-neutral-600 uppercase select-none">
               CONTACT
             </span>
             <div className="space-y-2 text-neutral-800">
@@ -109,7 +109,7 @@ export default function Footer() {
 
           {/* Column 4: Legal with ScrambleText hover */}
           <div className="lg:col-span-3 space-y-2">
-            <span className="block text-[13px] sm:text-sm font-mg12-regular font-light tracking-[0.2em] text-neutral-500 uppercase select-none">
+            <span className="block text-[13px] sm:text-sm font-mg12-regular font-light tracking-[0.2em] text-neutral-600 uppercase select-none">
               LEGAL
             </span>
             <div className="space-y-1.5 flex flex-col items-start">

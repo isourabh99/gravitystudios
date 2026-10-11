@@ -1,119 +1,11 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/footer/Footer";
 import CtaButton from "@/components/ui/CtaButton";
-
-// Custom Dropdown Component matching screenshot
-function CustomSelect({
-  label,
-  options,
-  value,
-  onChange,
-}: {
-  label: string;
-  options: string[];
-  value: string;
-  onChange: (val: string) => void;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  return (
-    <div className="space-y-2 relative" ref={dropdownRef}>
-      <label className="block text-[11px] sm:text-xs font-mono tracking-wider text-neutral-800 uppercase select-none">
-        {label}
-      </label>
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-white border border-neutral-300 px-4 py-3 flex items-center justify-between text-neutral-900 font-mg12-regular text-sm rounded-none focus:outline-none focus:border-black transition-colors select-none text-left"
-      >
-        <span>{value}</span>
-        {/* Custom Double Arrow Indicator matching screenshot */}
-        <span className="text-neutral-500 text-xs">⇅</span>
-      </button>
-
-      {isOpen && (
-        <ul className="absolute left-0 right-0 top-full mt-1 bg-white border border-neutral-300 shadow-xl z-50 py-1 rounded-none max-h-60 overflow-auto">
-          {options.map((opt) => (
-            <li
-              key={opt}
-              onClick={() => {
-                onChange(opt);
-                setIsOpen(false);
-              }}
-              className={`px-4 py-2.5 text-sm font-mg12-regular cursor-pointer transition-colors flex items-center justify-between ${
-                opt === value
-                  ? "bg-neutral-100 text-black font-medium"
-                  : "text-neutral-700 hover:bg-neutral-50 hover:text-black"
-              }`}
-            >
-              <span>{opt}</span>
-              {opt === value && <span className="text-xs">✓</span>}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
-
-// Custom Input Field with optional indicator
-function CustomInputField({
-  label,
-  name,
-  type = "text",
-  value,
-  onChange,
-  required = false,
-  optional = false,
-  placeholder = "",
-}: {
-  label: string;
-  name: string;
-  type?: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  required?: boolean;
-  optional?: boolean;
-  placeholder?: string;
-}) {
-  return (
-    <div className="space-y-2 w-full">
-      <div className="flex items-center justify-between select-none">
-        <label className="text-[11px] sm:text-xs font-mono tracking-wider text-neutral-800 uppercase">
-          {label}
-        </label>
-        {optional && (
-          <span className="text-[11px] sm:text-xs font-mono tracking-wider text-neutral-400 uppercase">
-            OPTIONAL
-          </span>
-        )}
-      </div>
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-        placeholder={placeholder}
-        className="w-full bg-white border border-neutral-300 px-4 py-3 text-neutral-900 font-mg12-regular text-sm rounded-none outline-none focus:border-black transition-colors"
-      />
-    </div>
-  );
-}
+import CustomSelect from "@/components/ui/CustomSelect";
+import CustomInputField from "@/components/ui/CustomInputField";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -316,21 +208,14 @@ export default function ContactPage() {
                 />
 
                 {/* Row 7: MESSAGE / PROJECT DETAILS Textarea */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between select-none">
-                    <label className="text-[11px] sm:text-xs font-mono tracking-wider text-neutral-800 uppercase">
-                      MESSAGE
-                    </label>
-                  </div>
-                  <textarea
-                    name="message"
-                    rows={6}
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    placeholder=""
-                    className="w-full bg-white border border-neutral-300 p-4 text-neutral-900 font-mg12-regular text-sm rounded-none outline-none focus:border-black transition-colors resize-y min-h-[140px]"
-                  />
-                </div>
+                <CustomInputField
+                  label="MESSAGE"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  multiline
+                  rows={6}
+                />
 
                 {/* Row 8: Checkbox */}
                 <label className="flex items-start gap-3 cursor-pointer select-none pt-2">

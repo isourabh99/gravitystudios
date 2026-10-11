@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import GravityLogo from "@/components/logo/GravityLogo";
 import CopyrightBar from "@/components/ui/CopyrightBar";
 import ScrambleText from "@/components/ui/ScrambleText";
+import CloseButton from "@/components/ui/CloseButton";
 import { useSmoothScroll } from "@/components/providers/SmoothScrollProvider";
 import Link from "next/link";
 
@@ -17,6 +18,8 @@ export default function Navbar() {
 
   // Dynamically detect whether the section under the fixed Navbar is dark or light
   useEffect(() => {
+    let rafId: number | null = null;
+
     const checkBgTheme = () => {
       if (typeof window === "undefined") return;
       const x = window.innerWidth / 2;
@@ -55,20 +58,31 @@ export default function Navbar() {
       setIsDarkBg(foundDark);
     };
 
+    const scheduleCheck = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        checkBgTheme();
+        rafId = null;
+      });
+    };
+
     if (lenis) {
-      lenis.on("scroll", checkBgTheme);
+      lenis.on("scroll", scheduleCheck);
     }
 
-    window.addEventListener("scroll", checkBgTheme, { passive: true });
-    window.addEventListener("resize", checkBgTheme, { passive: true });
-    checkBgTheme();
+    window.addEventListener("scroll", scheduleCheck, { passive: true });
+    window.addEventListener("resize", scheduleCheck, { passive: true });
+    scheduleCheck();
 
     return () => {
-      if (lenis) {
-        lenis.off("scroll", checkBgTheme);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
       }
-      window.removeEventListener("scroll", checkBgTheme);
-      window.removeEventListener("resize", checkBgTheme);
+      if (lenis) {
+        lenis.off("scroll", scheduleCheck);
+      }
+      window.removeEventListener("scroll", scheduleCheck);
+      window.removeEventListener("resize", scheduleCheck);
     };
   }, [lenis]);
 
@@ -200,30 +214,8 @@ export default function Navbar() {
                   NAVIGATION
                 </span>
 
-                {/* Close Button: Pure square white box, no rounded, no shadow, expanding gray circle on hover, cross spins */}
-                <button
-                  type="button"
-                  onClick={() => setMenuOpen(false)}
-                  className="group relative w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-none shadow-none  flex items-center justify-center overflow-hidden cursor-pointer focus:outline-none"
-                  aria-label="Close Menu"
-                >
-                  {/* Expanding gray circle from center (not black) */}
-                  <span
-                    className="absolute w-3 h-3 rounded-full bg-neutral-200 scale-0 group-hover:scale-[6.5] transition-transform duration-500 ease-out origin-center pointer-events-none"
-                    aria-hidden="true"
-                  />
-
-                  {/* Spinning cross icon */}
-                  <svg
-                    className="relative z-10 w-6 h-6 text-neutral-900  transition-all duration-300 ease-out group-hover:rotate-90"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+                {/* Reusable Close Button */}
+                <CloseButton onClick={() => setMenuOpen(false)} ariaLabel="Close Menu" />
               </div>
 
               {/* Main Nav Links Stack */}

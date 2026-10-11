@@ -1,9 +1,13 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { motion, useScroll, useTransform } from "framer-motion";
 import CopyrightBar from "@/components/ui/CopyrightBar";
-import Robot3DCanvas from "@/components/hero/Robot3DCanvas";
+
+const Robot3DCanvas = dynamic(() => import("@/components/hero/Robot3DCanvas"), {
+  ssr: false,
+});
 
 const HERO_TEXT = "We build premium web experiences for the world's most ambitious tech companies.";
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#@$%&*+=/<>[]";
@@ -21,15 +25,12 @@ export default function Hero() {
   const metaY = useTransform(scrollY, [0, 80], [0, 15]);
   const pointerEvents = useTransform(scrollY, (y) => (y > 60 ? "none" : "auto"));
 
-  // Scroll-driven Scramble & Reverse Unscramble
+  // Scroll-driven Scramble & Reverse Unscramble (reactive listener, zero idle CPU overhead)
   useEffect(() => {
-    let animId: number;
     let isClean = true;
     const len = HERO_TEXT.length;
 
-    const tick = () => {
-      const y = scrollY.get();
-
+    const unsubscribe = scrollY.on("change", (y) => {
       if (y <= 2) {
         if (!isClean && textRef.current) {
           textRef.current.textContent = HERO_TEXT;
@@ -58,12 +59,9 @@ export default function Hero() {
           textRef.current.textContent = out;
         }
       }
+    });
 
-      animId = requestAnimationFrame(tick);
-    };
-
-    animId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(animId);
+    return () => unsubscribe();
   }, [scrollY]);
 
   return (

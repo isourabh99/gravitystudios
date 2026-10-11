@@ -2,7 +2,6 @@
 
 import React, { useRef, useMemo, useEffect, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
 import * as THREE from "three";
 import { useSound } from "@/hooks/useSound";
 import { useUniversalLoader } from "@/components/loader/UniversalLoaderWrapper";
@@ -33,12 +32,14 @@ if (typeof window !== "undefined") {
 function useCrtScreenTexture() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const startTimeRef = useRef<number | null>(null);
+  const lastTickRef = useRef<number>(0);
+  const isFinishedRef = useRef<boolean>(false);
 
   const texture = useMemo(() => {
     if (typeof window === "undefined") return null;
     const c = document.createElement("canvas");
-    c.width = 1024;
-    c.height = 640;
+    c.width = 512;
+    c.height = 320;
     canvasRef.current = c;
     const tex = new THREE.CanvasTexture(c);
     tex.minFilter = THREE.LinearFilter;
@@ -48,6 +49,7 @@ function useCrtScreenTexture() {
   }, []);
 
   useFrame(() => {
+    if (isFinishedRef.current) return;
     const canvas = canvasRef.current;
     if (!canvas || !texture) return;
     const ctx = canvas.getContext("2d");
@@ -55,6 +57,11 @@ function useCrtScreenTexture() {
 
     const now = performance.now();
     if (startTimeRef.current === null) startTimeRef.current = now;
+
+    // Throttle 2D canvas execution to ~22fps during animation to save CPU
+    if (now - lastTickRef.current < 45) return;
+    lastTickRef.current = now;
+
     const elapsed = (now - startTimeRef.current) * 0.001;
     const W = canvas.width;
     const H = canvas.height;
@@ -67,11 +74,11 @@ function useCrtScreenTexture() {
     if (elapsed < 0.5) {
       const p = elapsed / 0.5;
       const bw = p * W;
-      const bh = 3 + p * 10;
+      const bh = 2 + p * 6;
       ctx.save();
       ctx.fillStyle = "#ffffff";
       ctx.shadowColor = "#ffffff";
-      ctx.shadowBlur = 40;
+      ctx.shadowBlur = 20;
       ctx.fillRect((W - bw) / 2, (H - bh) / 2, bw, bh);
       ctx.restore();
       texture.needsUpdate = true;
@@ -92,8 +99,8 @@ function useCrtScreenTexture() {
     }
 
     // Subtle scanlines
+    ctx.fillStyle = "rgba(0,0,0,0.15)";
     for (let y = 0; y < H; y += 4) {
-      ctx.fillStyle = "rgba(0,0,0,0.15)";
       ctx.fillRect(0, y, W, 1);
     }
 
@@ -104,24 +111,24 @@ function useCrtScreenTexture() {
       const line1 = "I'm the Junca assistant.";
       const line2 = "Here to help you build.";
       const total = Math.floor(active * 22);
-      ctx.font = "bold 42px 'Courier New', monospace";
+      ctx.font = "bold 22px 'Courier New', monospace";
       ctx.fillStyle = "#c8d8e8";
       const l1 = line1.substring(0, Math.min(total, line1.length));
-      ctx.fillText(l1, 55, 155);
+      ctx.fillText(l1, 28, 80);
       if (total > line1.length + 4) {
         const l2 = line2.substring(0, Math.min(total - line1.length - 4, line2.length));
-        ctx.fillText(l2, 55, 220);
+        ctx.fillText(l2, 28, 115);
       }
       if (Math.floor(active * 3) % 2 === 0) {
-        ctx.fillText("\u2588", 55 + ctx.measureText(l1).width + 2, 155);
+        ctx.fillText("\u2588", 28 + ctx.measureText(l1).width + 2, 80);
       }
     } else {
       // PHASE 2: Services menu matching reference image exactly
       const st = active - 3.0;
-      ctx.font = "bold 38px 'Courier New', monospace";
+      ctx.font = "bold 20px 'Courier New', monospace";
       ctx.fillStyle = "#e8402a";
-      ctx.fillText("> services", 55, 108);
-      ctx.fillRect(55, 118, 360, 2);
+      ctx.fillText("> services", 28, 55);
+      ctx.fillRect(28, 62, 190, 2);
 
       const services = [
         "01  Web design & UX",
@@ -130,14 +137,19 @@ function useCrtScreenTexture() {
         "04  Brand identity",
         "05  SEO & GEO",
       ];
-      ctx.font = "28px 'Courier New', monospace";
+      ctx.font = "15px 'Courier New', monospace";
       services.forEach((line, i) => {
         if (st > i * 0.18) {
           const a = Math.min(1, (st - i * 0.18) / 0.25);
           ctx.fillStyle = `rgba(190,205,220,${a})`;
-          ctx.fillText(line, 55, 172 + i * 50);
+          ctx.fillText(line, 28, 90 + i * 26);
         }
       });
+
+      // Once all services have rendered, mark finished to stop CPU load entirely
+      if (st > 5 * 0.18 + 0.3) {
+        isFinishedRef.current = true;
+      }
     }
 
     // CRT glass reflection band (top-left bright arc)
@@ -155,12 +167,12 @@ function useCrtScreenTexture() {
     ctx.fill();
 
     // Bottom labels
-    ctx.font = "21px 'Courier New', monospace";
+    ctx.font = "11px 'Courier New', monospace";
     ctx.fillStyle = "rgba(120,140,165,0.6)";
-    ctx.fillText("JUNCA OS  v0.1", 55, H - 40);
-    ctx.font = "bold 21px 'Courier New', monospace";
+    ctx.fillText("JUNCA OS  v0.1", 28, H - 20);
+    ctx.font = "bold 11px 'Courier New', monospace";
     ctx.fillStyle = "#e8402a";
-    ctx.fillText("AU REPCS", W - 200, H - 40);
+    ctx.fillText("AU REPCS", W - 105, H - 20);
 
     texture.needsUpdate = true;
   });
@@ -254,11 +266,10 @@ function RobotHead({ headRef }: { headRef: React.RefObject<THREE.Group | null> }
   // Dark glass overlay material for CRT screen
   const glassMat = useMemo(
     () =>
-      new THREE.MeshPhysicalMaterial({
+      new THREE.MeshStandardMaterial({
         color: "#1a2540",
         metalness: 0.1,
         roughness: 0.05,
-        transmission: 0.0,
         transparent: true,
         opacity: 0.35,
         envMapIntensity: 2.0,
@@ -266,7 +277,7 @@ function RobotHead({ headRef }: { headRef: React.RefObject<THREE.Group | null> }
     []
   );
 
-  // Octagonal geometries
+  // Octagonal geometries (optimized bevel segments to cut vertex processing by 50%)
   const headGeo = useMemo(() => {
     const shape = buildOctagonShape(1.76, 1.22, 0.28);
     return new THREE.ExtrudeGeometry(shape, {
@@ -274,7 +285,7 @@ function RobotHead({ headRef }: { headRef: React.RefObject<THREE.Group | null> }
       bevelEnabled: true,
       bevelThickness: 0.05,
       bevelSize: 0.04,
-      bevelSegments: 4,
+      bevelSegments: 2,
     });
   }, []);
 
@@ -285,7 +296,7 @@ function RobotHead({ headRef }: { headRef: React.RefObject<THREE.Group | null> }
       bevelEnabled: true,
       bevelThickness: 0.02,
       bevelSize: 0.015,
-      bevelSegments: 2,
+      bevelSegments: 1,
     });
   }, []);
 
@@ -296,7 +307,7 @@ function RobotHead({ headRef }: { headRef: React.RefObject<THREE.Group | null> }
       bevelEnabled: true,
       bevelThickness: 0.02,
       bevelSize: 0.01,
-      bevelSegments: 2,
+      bevelSegments: 1,
     });
   }, []);
 
@@ -489,8 +500,8 @@ function RobotModel() {
       <group position={[0, -2.07, 0.72]}>
         {[-0.55, -0.44, -0.33, -0.22, -0.11, 0, 0.11, 0.22, 0.33, 0.44, 0.55].map(
           (x, i) => (
-            <mesh key={i} position={[x, 0, 0]} material={darkMat}>
-              <cylinderGeometry args={[0.022, 0.022, 0.04, 12]} rotation={[Math.PI / 2, 0, 0]} />
+            <mesh key={i} position={[x, 0, 0]} rotation={[Math.PI / 2, 0, 0]} material={darkMat}>
+              <cylinderGeometry args={[0.022, 0.022, 0.04, 12]} />
             </mesh>
           )
         )}
@@ -499,16 +510,16 @@ function RobotModel() {
       {/* ═══ FAN ASSEMBLY ═══ */}
       <group position={[-0.33, -1.32, 0.72]}>
         {/* Dark recessed housing */}
-        <mesh material={darkMat}>
-          <cylinderGeometry args={[0.46, 0.46, 0.08, 32]} rotation={[Math.PI / 2, 0, 0]} />
+        <mesh material={darkMat} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.46, 0.46, 0.08, 32]} />
         </mesh>
         {/* Chrome outer ring */}
-        <mesh material={chromeMat}>
-          <torusGeometry args={[0.42, 0.03, 12, 32]} rotation={[Math.PI / 2, 0, 0]} />
+        <mesh material={chromeMat} rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[0.42, 0.03, 12, 32]} />
         </mesh>
         {/* Chrome centre hub */}
-        <mesh material={chromeMat} position={[0, 0, 0.03]}>
-          <cylinderGeometry args={[0.1, 0.1, 0.08, 20]} rotation={[Math.PI / 2, 0, 0]} />
+        <mesh material={chromeMat} position={[0, 0, 0.03]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.1, 0.1, 0.08, 20]} />
         </mesh>
         {/* RED fan blades (matching reference) */}
         <group ref={fanBladesRef} position={[0, 0, 0.04]}>
@@ -537,119 +548,36 @@ function RobotModel() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   VOLUMETRIC SMOKE / FOG — procedural soft cloud texture on billboard sprites
-═══════════════════════════════════════════════════════════════════════════ */
-function useSmokeTexture() {
-  return useMemo(() => {
-    if (typeof window === "undefined") return null;
-    const size = 128;
-    const canvas = document.createElement("canvas");
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext("2d")!;
-
-    // Soft radial cloud puff — multiple overlapping gradients for organic look
-    const cx = size / 2;
-    const cy = size / 2;
-
-    // Base large soft gradient
-    const g1 = ctx.createRadialGradient(cx, cy, 0, cx, cy, size * 0.5);
-    g1.addColorStop(0, "rgba(180,40,40,0.45)");
-    g1.addColorStop(0.3, "rgba(120,20,20,0.25)");
-    g1.addColorStop(0.6, "rgba(80,10,10,0.1)");
-    g1.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = g1;
-    ctx.fillRect(0, 0, size, size);
-
-    // Secondary offset blob for organic shape
-    const g2 = ctx.createRadialGradient(cx * 0.7, cy * 0.8, 0, cx * 0.7, cy * 0.8, size * 0.35);
-    g2.addColorStop(0, "rgba(200,50,30,0.3)");
-    g2.addColorStop(0.5, "rgba(100,15,15,0.12)");
-    g2.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = g2;
-    ctx.fillRect(0, 0, size, size);
-
-    // Third offset blob
-    const g3 = ctx.createRadialGradient(cx * 1.3, cy * 1.2, 0, cx * 1.3, cy * 1.2, size * 0.3);
-    g3.addColorStop(0, "rgba(160,30,20,0.2)");
-    g3.addColorStop(0.6, "rgba(60,10,10,0.08)");
-    g3.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = g3;
-    ctx.fillRect(0, 0, size, size);
-
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.minFilter = THREE.LinearFilter;
-    tex.magFilter = THREE.LinearFilter;
-    return tex;
-  }, []);
-}
-
-function SmokeParticles() {
-  const count = 22;
-  const meshRef = useRef<THREE.InstancedMesh>(null!);
-  const dummy = useMemo(() => new THREE.Object3D(), []);
-  const smokeTex = useSmokeTexture();
-
-  const particles = useMemo(
-    () =>
-      Array.from({ length: count }, () => ({
-        x: (Math.random() - 0.3) * 7,
-        y: (Math.random() - 0.5) * 5,
-        z: -0.8 - Math.random() * 3,
-        s: 1.5 + Math.random() * 2.5,
-        sp: 0.06 + Math.random() * 0.14,
-        rs: (Math.random() - 0.5) * 0.008,
-        r: Math.random() * Math.PI * 2,
-        drift: (Math.random() - 0.5) * 0.03,
-      })),
-    []
-  );
-
-  useFrame(({ camera }, delta) => {
-    if (!meshRef.current) return;
-    particles.forEach((p, i) => {
-      p.y += delta * p.sp;
-      p.x += delta * p.drift;
-      p.r += p.rs;
-      if (p.y > 4) {
-        p.y = -3.5;
-        p.x = (Math.random() - 0.3) * 7;
-      }
-      dummy.position.set(p.x, p.y, p.z);
-      // Billboard: always face camera
-      dummy.quaternion.copy(camera.quaternion);
-      dummy.rotateZ(p.r);
-      dummy.scale.setScalar(p.s);
-      dummy.updateMatrix();
-      meshRef.current.setMatrixAt(i, dummy.matrix);
-    });
-    meshRef.current.instanceMatrix.needsUpdate = true;
-  });
-
-  if (!smokeTex) return null;
-
-  return (
-    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
-      <planeGeometry args={[2, 2]} />
-      <meshBasicMaterial
-        map={smokeTex}
-        transparent
-        opacity={0.6}
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-      />
-    </instancedMesh>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
    CAMERA CONTROLLER
 ═══════════════════════════════════════════════════════════════════════════ */
 function CameraController() {
   const { camera } = useThree();
-  useFrame(() => {
+  const innerHeightRef = useRef(typeof window !== "undefined" ? window.innerHeight : 800);
+  const scrollYRef = useRef(0);
+
+  useEffect(() => {
     if (typeof window === "undefined") return;
-    const p = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.9)));
+    scrollYRef.current = window.scrollY;
+    innerHeightRef.current = window.innerHeight;
+
+    const onResize = () => {
+      innerHeightRef.current = window.innerHeight;
+    };
+    const onScroll = () => {
+      scrollYRef.current = window.scrollY;
+    };
+
+    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  useFrame(() => {
+    const h = innerHeightRef.current || 800;
+    const p = Math.min(1, Math.max(0, scrollYRef.current / (h * 0.9)));
     const tz = THREE.MathUtils.lerp(4.2, 0.85, p);
     const tx = THREE.MathUtils.lerp(0, 0.75, p);
     const ty = THREE.MathUtils.lerp(0.2, 0.3, p);
@@ -678,7 +606,7 @@ export default function Robot3DCanvas() {
   return (
     <div className="absolute inset-0 pointer-events-auto z-10">
       <Canvas
-        shadows="percentage"
+        dpr={[1, 1.5]}
         camera={{ position: [0, 0.2, 4.2], fov: 46 }}
         gl={{
           antialias: true,
@@ -688,18 +616,12 @@ export default function Robot3DCanvas() {
           toneMappingExposure: 1.1,
         }}
       >
-        {/* HDR Environment for realistic metallic reflections — THIS makes it look real */}
-        <Environment preset="night" background={false} />
+        {/* Studio lighting: zero CubeCamera / PMREM overhead */}
+        <hemisphereLight args={["#ffffff", "#2a0505", 1.2]} />
+        <directionalLight position={[0, 6, -2]} intensity={2.0} color="#ffffff" />
 
         {/* Key light — white from upper-right */}
-        <directionalLight
-          position={[4, 6, 5]}
-          intensity={3.5}
-          color="#ffffff"
-          castShadow
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
-        />
+        <directionalLight position={[4, 6, 5]} intensity={3.5} color="#ffffff" />
 
         {/* Red fill from left */}
         <directionalLight position={[-5, 2, 3]} intensity={2.8} color="#cc2020" />
@@ -713,7 +635,6 @@ export default function Robot3DCanvas() {
         {/* Subtle ambient */}
         <ambientLight intensity={0.4} />
 
-        <SmokeParticles />
         <CameraController />
         <RobotModel />
       </Canvas>

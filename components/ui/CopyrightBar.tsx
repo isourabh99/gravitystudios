@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, MotionProps } from "framer-motion";
+import { motion, MotionProps, HTMLMotionProps } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
 import { useSmoothScroll } from "@/components/providers/SmoothScrollProvider";
 
-export interface CopyrightBarProps extends MotionProps {
+export interface CopyrightBarProps extends HTMLMotionProps<"div"> {
   className?: string;
   variant?: "hero" | "footer" | "menu" | "default";
 }
@@ -46,13 +46,18 @@ export default function CopyrightBar({
   useEffect(() => {
     if (variant !== "footer") return;
 
+    let ticking = false;
     const checkAtEnd = () => {
-      if (typeof window === "undefined") return;
-      const scrollPosition = window.scrollY + window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      // Triggers ONLY when user reaches the very end of the page (within 40px)
-      const atBottom = scrollPosition >= documentHeight - 40;
-      setIsAtBottom(atBottom);
+      if (typeof window === "undefined" || ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const scrollPosition = window.scrollY + window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        // Triggers ONLY when user reaches the very end of the page (within 40px)
+        const atBottom = scrollPosition >= documentHeight - 40;
+        setIsAtBottom(atBottom);
+        ticking = false;
+      });
     };
 
     // Lenis scroll listener
@@ -102,15 +107,15 @@ export default function CopyrightBar({
   const isLight = variant === "menu" || variant === "footer";
 
   // Footer fade in animation: default hidden (opacity 0), fades in only at the end
-  const footerAnimation =
+  const footerAnimation: HTMLMotionProps<"div"> =
     variant === "footer"
       ? {
         initial: { opacity: 0 },
         animate: {
           opacity: isAtBottom ? 1 : 0,
-          pointerEvents: isAtBottom ? ("auto" as const) : ("none" as const),
+          pointerEvents: isAtBottom ? "auto" : "none",
         },
-        transition: { duration: 0.45, ease: "easeInOut" },
+        transition: { duration: 0.45, ease: "easeInOut" as const },
       }
       : {};
 

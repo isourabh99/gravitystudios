@@ -12,7 +12,7 @@ export default function ClientsSection() {
 
           {/* Right Column: OUR CLIENTS Text Snippet (Menu-styled text size & font light) */}
           <div className="max-w-md ml-auto text-left space-y-3">
-            <span className="block text-xs sm:text-[13px] font-mg12-regular font-light tracking-[0.2em] text-neutral-500 uppercase select-none">
+            <span className="block text-xs sm:text-[13px] font-mg12-regular font-light tracking-[0.2em] text-neutral-600 uppercase select-none">
               OUR CLIENTS
             </span>
             <p className="text-xs sm:text-[13px] font-mg12-regular font-light text-neutral-700 leading-relaxed">
