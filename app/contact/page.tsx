@@ -6,6 +6,7 @@ import Footer from "@/components/footer/Footer";
 import CtaButton from "@/components/ui/CtaButton";
 import CustomSelect from "@/components/ui/CustomSelect";
 import CustomInputField from "@/components/ui/CustomInputField";
+import ScrambleText from "@/components/ui/ScrambleText";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -86,7 +87,9 @@ export default function ContactPage() {
                 className="flex items-center gap-2 hover:text-[#ED3327] transition-colors"
               >
                 <span>→</span>
-                <span className="lowercase">isourabhsoni99@gmail.com</span>
+                <span className="lowercase">
+                  <ScrambleText text="isourabhsoni99@gmail.com" hoverColor="#ED3327" />
+                </span>
               </a>
               <a
                 href="https://wa.me/919109270472"
@@ -95,7 +98,7 @@ export default function ContactPage() {
                 className="flex items-center gap-2 hover:text-[#ED3327] transition-colors"
               >
                 <span>→</span>
-                <span>Whatsapp • +91 9109270472</span>
+                <ScrambleText text="Whatsapp • +91 9109270472" hoverColor="#ED3327" />
               </a>
               <a
                 href="https://linkedin.com/in/isourabh99"
@@ -104,7 +107,7 @@ export default function ContactPage() {
                 className="flex items-center gap-2 hover:text-[#ED3327] transition-colors"
               >
                 <span>→</span>
-                <span>LinkedIn</span>
+                <ScrambleText text="LinkedIn" hoverColor="#ED3327" />
               </a>
             </div>
           </div>
