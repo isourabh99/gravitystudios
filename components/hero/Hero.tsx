@@ -25,51 +25,55 @@ export default function Hero() {
   const metaY = useTransform(scrollY, [0, 80], [0, 15]);
   const pointerEvents = useTransform(scrollY, (y) => (y > 60 ? "none" : "auto"));
 
-  // Scroll-driven Scramble & Reverse Unscramble (reactive listener, zero idle CPU overhead)
+  // Scroll-driven Scramble & Reverse Unscramble (RAF throttled for smooth scrolling)
   useEffect(() => {
     let isClean = true;
+    let rafId: number | null = null;
     const len = HERO_TEXT.length;
 
     const unsubscribe = scrollY.on("change", (y) => {
-      if (y <= 2) {
-        if (!isClean && textRef.current) {
-          textRef.current.textContent = HERO_TEXT;
-          isClean = true;
-        }
-      } else if (y <= 230) {
-        isClean = false;
-        if (textRef.current) {
-          // Progress across 0px to 200px scroll range
-          const progress = Math.min(1, Math.max(0, y / 200));
-          const scrambleCount = Math.floor(progress * len);
-
-          let out = "";
-          for (let i = 0; i < len; i++) {
-            const ch = HERO_TEXT[i];
-            if (ch === " " || ch === "'") {
-              out += ch;
-            } else if (i < scrambleCount) {
-              // Scroll Down: Scramble moves from starting (index 0) to ending (index N)
-              out += CHARS[Math.floor(Math.random() * CHARS.length)];
-            } else {
-              // Scroll Up: Clean text restores in reverse from ending (index N) to starting (index 0)
-              out += ch;
-            }
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        if (y <= 2) {
+          if (!isClean && textRef.current) {
+            textRef.current.textContent = HERO_TEXT;
+            isClean = true;
           }
-          textRef.current.textContent = out;
+        } else if (y <= 230) {
+          isClean = false;
+          if (textRef.current) {
+            const progress = Math.min(1, Math.max(0, y / 200));
+            const scrambleCount = Math.floor(progress * len);
+
+            let out = "";
+            for (let i = 0; i < len; i++) {
+              const ch = HERO_TEXT[i];
+              if (ch === " " || ch === "'") {
+                out += ch;
+              } else if (i < scrambleCount) {
+                out += CHARS[Math.floor(Math.random() * CHARS.length)];
+              } else {
+                out += ch;
+              }
+            }
+            textRef.current.textContent = out;
+          }
         }
-      }
+      });
     });
 
-    return () => unsubscribe();
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      unsubscribe();
+    };
   }, [scrollY]);
 
   return (
     <section data-theme="dark" className="relative w-full h-[100dvh] sm:min-h-[700px] bg-black text-neutral-100 flex flex-col justify-between px-5 sm:px-12 pt-20 sm:pt-28 pb-5 sm:pb-8 select-none overflow-hidden">
-      {/* Light Ambient Red Atmosphere behind Robot */}
-      <div className="absolute right-0 top-1/4 bottom-0 w-full sm:w-[65%] pointer-events-none z-0 overflow-hidden opacity-80">
-        <div className="absolute -right-20 top-10 w-[600px] h-[600px] rounded-full bg-red-700/15 blur-[160px]" />
-        <div className="absolute right-40 bottom-10 w-[450px] h-[450px] rounded-full bg-red-900/20 blur-[140px]" />
+      {/* Light Ambient Red Atmosphere behind Robot (GPU composited) */}
+      <div className="absolute right-0 top-1/4 bottom-0 w-full sm:w-[65%] pointer-events-none z-0 overflow-hidden opacity-80 transform-gpu">
+        <div className="absolute -right-20 top-10 w-[600px] h-[600px] rounded-full bg-red-700/15 blur-[120px] transform-gpu" />
+        <div className="absolute right-40 bottom-10 w-[450px] h-[450px] rounded-full bg-red-900/20 blur-[100px] transform-gpu" />
       </div>
 
       {/* Interactive 3D AI Robot Assistant with Cursor Tracking & Scroll Camera Zoom */}

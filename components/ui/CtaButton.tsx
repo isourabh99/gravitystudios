@@ -42,11 +42,11 @@ export default function CtaButton({
   const animatedContent = (
     <span className="relative inline-flex items-center justify-center overflow-hidden h-[1.3em] leading-none">
       {/* Primary text sliding up out of view on hover */}
-      <span className="inline-flex items-center gap-2 transition-transform duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-full">
+      <span className="inline-flex items-center gap-2 transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-[150%] group-hover:opacity-0">
         {children}
       </span>
       {/* Duplicate text sliding up into view from bottom on hover */}
-      <span className="absolute inset-0 inline-flex items-center justify-center gap-2 translate-y-full transition-transform duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-y-0">
+      <span className="absolute inset-0 inline-flex items-center justify-center gap-2 translate-y-[150%] opacity-0 transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-y-0 group-hover:opacity-100">
         {children}
       </span>
     </span>

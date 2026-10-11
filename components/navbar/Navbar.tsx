@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import GravityLogo from "@/components/logo/GravityLogo";
-import CopyrightBar from "@/components/ui/CopyrightBar";
 import ScrambleText from "@/components/ui/ScrambleText";
 import CloseButton from "@/components/ui/CloseButton";
 import { useSmoothScroll } from "@/components/providers/SmoothScrollProvider";
@@ -326,11 +325,6 @@ export default function Navbar() {
                       </a>
                     </div>
                   </div>
-                </div>
-
-                {/* Reused CopyrightBar inside Menu */}
-                <div className="pt-3 border-t border-neutral-300/60">
-                  <CopyrightBar variant="menu" />
                 </div>
               </div>
             </motion.aside>
