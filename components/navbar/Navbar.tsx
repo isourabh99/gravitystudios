@@ -8,13 +8,28 @@ import ScrambleText from "@/components/ui/ScrambleText";
 import CloseButton from "@/components/ui/CloseButton";
 import { useSmoothScroll } from "@/components/providers/SmoothScrollProvider";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState("Projects");
-  const [isDarkBg, setIsDarkBg] = useState(true);
+  const [activeItem, setActiveItem] = useState("Home");
+  const [isDarkBg, setIsDarkBg] = useState(() => (pathname?.startsWith("/contact") ? false : true));
   const { scrollY } = useScroll();
   const lenis = useSmoothScroll();
+
+  // Sync active menu item with current route/hash whenever route or menu opens
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const hash = window.location.hash;
+    if (hash === "#projects") setActiveItem("Projects");
+    else if (hash === "#services") setActiveItem("Services");
+    else if (hash === "#industries") setActiveItem("Industries");
+    else if (hash === "#studio") setActiveItem("Studio");
+    else if (hash === "#news") setActiveItem("News");
+    else if (pathname === "/contact") setActiveItem("Contact");
+    else setActiveItem("Home");
+  }, [pathname, menuOpen]);
 
   // Dynamically detect whether the section under the fixed Navbar is dark or light
   useEffect(() => {
@@ -22,6 +37,13 @@ export default function Navbar() {
 
     const checkBgTheme = () => {
       if (typeof window === "undefined") return;
+
+      // Contact page is always light theme
+      if (pathname?.startsWith("/contact")) {
+        setIsDarkBg(false);
+        return;
+      }
+
       const x = window.innerWidth / 2;
       const y = 45; // top bar area
 
@@ -29,7 +51,16 @@ export default function Navbar() {
       let foundDark = true;
 
       for (const el of elements) {
-        if (el.closest("header") || el.tagName === "HEADER") continue;
+        // Ignore header, loader overlay and canvas elements
+        if (
+          el.closest("header") ||
+          el.tagName === "HEADER" ||
+          el.closest(".z-\\[9999\\]") ||
+          el.closest(".z-\\[9998\\]") ||
+          el.getAttribute("data-loader")
+        ) {
+          continue;
+        }
 
         // Check explicit data-theme attribute
         const theme =
@@ -66,25 +97,33 @@ export default function Navbar() {
       });
     };
 
+    // Immediate check on mount / route change
+    scheduleCheck();
+    const t1 = setTimeout(scheduleCheck, 150);
+    const t2 = setTimeout(scheduleCheck, 600);
+    const t3 = setTimeout(scheduleCheck, 1500);
+
     if (lenis) {
       lenis.on("scroll", scheduleCheck);
     }
 
     window.addEventListener("scroll", scheduleCheck, { passive: true });
     window.addEventListener("resize", scheduleCheck, { passive: true });
-    scheduleCheck();
 
     return () => {
       if (rafId !== null) {
         cancelAnimationFrame(rafId);
       }
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
       if (lenis) {
         lenis.off("scroll", scheduleCheck);
       }
       window.removeEventListener("scroll", scheduleCheck);
       window.removeEventListener("resize", scheduleCheck);
     };
-  }, [lenis]);
+  }, [lenis, pathname]);
 
   // Center navigation links translate UP and fade OUT smoothly on scroll down
   const linksY = useTransform(scrollY, [0, 150], [0, -40]);

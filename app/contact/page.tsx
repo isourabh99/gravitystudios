@@ -44,7 +44,7 @@ export default function ContactPage() {
       <Navbar />
 
       {/* Main Content Container aligned strictly to max-w-8xl mx-auto px-6 sm:px-12 matching Navbar and Footer */}
-      <main className="flex-1 max-w-8xl mx-auto w-full px-6 sm:px-12 pt-32 sm:pt-40 pb-20">
+      <main className="flex-1 max-w-8xl mx-auto w-full px-6 sm:px-12 pt-20 sm:pt-24 lg:pt-28 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
           {/* ================= LEFT COLUMN (Natural page scroll, no sticky) ================= */}

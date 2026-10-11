@@ -102,6 +102,7 @@ export default function UniversalLoader({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
           className="fixed inset-0 z-[9999] bg-black text-white flex flex-col justify-center items-center px-6 sm:px-12 select-none pointer-events-auto"
+          data-loader="true"
         >
           <style>{`
             @keyframes logoWaveRipple {

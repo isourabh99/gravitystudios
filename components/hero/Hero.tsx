@@ -78,7 +78,7 @@ export default function Hero() {
       {/* Main Content Overlay Container */}
       <div className="max-w-8xl mx-auto w-full flex-1 flex flex-col justify-between relative z-20 pointer-events-none">
         {/* Hero Title Typography (Smaller, Regular Weight) */}
-        <div className="flex-1 flex items-center max-w-2xl lg:max-w-3xl py-6 my-auto">
+        <div className="flex-1 flex items-start sm:items-center max-w-2xl lg:max-w-3xl pt-6 sm:pt-0 sm:my-auto">
           <motion.h1
             ref={textRef}
             style={{ y: titleY, opacity: titleOpacity }}
