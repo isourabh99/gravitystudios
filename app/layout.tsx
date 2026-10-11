@@ -4,7 +4,6 @@ import "./globals.css";
 import UniversalLoaderWrapper from "@/components/loader/UniversalLoaderWrapper";
 import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
-import { Analytics } from "@vercel/analytics/react";
 
 const mg12Bold = localFont({
   src: "./fonts/mg12-bold.woff2",
@@ -99,7 +98,7 @@ const jsonLd = {
         "@type": "ContactPoint",
         contactType: "customer support",
         email: "isourabhsoni99@gmail.com",
-        telephone: "+91-9109270472",
+        telephone: "+91-8871795472",
       },
       sameAs: [
         "https://linkedin.com/in/isourabh99",
@@ -134,7 +133,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <GoogleAnalytics />
-        <Analytics />
         <SmoothScrollProvider>
           <UniversalLoaderWrapper>
             {children}

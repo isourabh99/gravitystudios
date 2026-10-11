@@ -141,9 +141,8 @@ export default function Navbar() {
           {/* Center 2-Column Links Layout (Slides up & fades out on scroll, color adapts to background) */}
           <motion.div
             style={{ y: linksY, opacity: linksOpacity }}
-            className={`hidden md:flex items-start gap-14 lg:gap-16 text-sm sm:text-[15px] font-mg12-regular font-light transition-colors duration-300 ${
-              isDarkBg ? "text-neutral-300" : "text-neutral-700"
-            }`}
+            className={`hidden md:flex items-start gap-14 lg:gap-16 text-sm sm:text-[15px] font-mg12-regular font-light transition-colors duration-300 ${isDarkBg ? "text-neutral-300" : "text-neutral-700"
+              }`}
           >
             {/* Column 1 */}
             <div className="flex flex-col space-y-2">
@@ -155,11 +154,10 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`inline-block transition-colors duration-200 ${
-                    isDarkBg
+                  className={`inline-block transition-colors duration-200 ${isDarkBg
                       ? "text-neutral-300 hover:text-white"
                       : "text-neutral-700 hover:text-black"
-                  }`}
+                    }`}
                 >
                   {link.name}
                 </Link>
@@ -176,11 +174,10 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`inline-block transition-colors duration-200 ${
-                    isDarkBg
+                  className={`inline-block transition-colors duration-200 ${isDarkBg
                       ? "text-neutral-300 hover:text-white"
                       : "text-neutral-700 hover:text-black"
-                  }`}
+                    }`}
                 >
                   {link.name}
                 </Link>
@@ -192,20 +189,17 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
-            className={`group p-2 flex flex-col items-end justify-center gap-1.5 cursor-pointer focus:outline-none transition-colors duration-300 ${
-              isDarkBg ? "text-white" : "text-black"
-            }`}
+            className={`group p-2 flex flex-col items-end justify-center gap-1.5 cursor-pointer focus:outline-none transition-colors duration-300 ${isDarkBg ? "text-white" : "text-black"
+              }`}
             aria-label="Open Navigation Menu"
           >
             <span
-              className={`w-6 h-[1.5px] transition-all duration-300 ${
-                isDarkBg ? "bg-white" : "bg-black"
-              }`}
+              className={`w-6 h-[1.5px] transition-all duration-300 ${isDarkBg ? "bg-white" : "bg-black"
+                }`}
             />
             <span
-              className={`w-6 h-[1.5px] transition-all duration-300 group-hover:scale-x-50 origin-center ${
-                isDarkBg ? "bg-white" : "bg-black"
-              }`}
+              className={`w-6 h-[1.5px] transition-all duration-300 group-hover:scale-x-50 origin-center ${isDarkBg ? "bg-white" : "bg-black"
+                }`}
             />
           </button>
         </nav>
@@ -262,17 +256,15 @@ export default function Navbar() {
                           setActiveItem(item.name);
                           setMenuOpen(false);
                         }}
-                        className={`group relative inline-flex items-center text-3xl sm:text-4xl md:text-[42px] leading-[1.18] font-mg12-regular font-light tracking-tight transition-colors duration-200 ${
-                          isActive ? "text-neutral-500" : "text-neutral-900"
-                        }`}
+                        className={`group relative inline-flex items-center text-3xl sm:text-4xl md:text-[42px] leading-[1.18] font-mg12-regular font-light tracking-tight transition-colors duration-200 ${isActive ? "text-neutral-500" : "text-neutral-900"
+                          }`}
                       >
                         <span className="relative inline-block transition-transform duration-300 ease-out group-hover:translate-x-3">
                           {item.name}
                           {/* Thin linear underline starting from LEFT */}
                           <span
-                            className={`absolute -bottom-0.5 left-0 w-full h-[1.5px] ${
-                              isActive ? "bg-neutral-500" : "bg-neutral-900"
-                            } origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-linear pointer-events-none`}
+                            className={`absolute -bottom-0.5 left-0 w-full h-[1.5px] ${isActive ? "bg-neutral-500" : "bg-neutral-900"
+                              } origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-linear pointer-events-none`}
                           />
                         </span>
                       </Link>

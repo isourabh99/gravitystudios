@@ -45,11 +45,11 @@ export default function CopyrightBar({
   const footerAnimation: HTMLMotionProps<"div"> =
     variant === "footer"
       ? {
-          initial: { opacity: 0, y: 15 },
-          whileInView: { opacity: 1, y: 0 },
-          viewport: { once: false, amount: 0.4 },
-          transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-        }
+        initial: { opacity: 0, y: 15 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: false, amount: 0.4 },
+        transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+      }
       : {};
 
   if (variant === "footer") {
@@ -68,9 +68,8 @@ export default function CopyrightBar({
 
   return (
     <motion.div
-      className={`relative flex items-center justify-between gap-1 xs:gap-3 sm:gap-6 text-[9.5px] xs:text-[11px] sm:text-[13px] font-mg12-regular font-light w-full select-none flex-nowrap ${
-        isLight ? "text-neutral-500" : "text-neutral-400"
-      } ${className}`}
+      className={`relative flex items-center justify-between gap-1 xs:gap-3 sm:gap-6 text-[9.5px] xs:text-[11px] sm:text-[13px] font-mg12-regular font-light w-full select-none flex-nowrap ${isLight ? "text-neutral-500" : "text-neutral-400"
+        } ${className}`}
       {...motionProps}
     >
       {/* Left Metadata: Copyright, Timezone, Time */}
@@ -91,17 +90,15 @@ export default function CopyrightBar({
         <button
           type="button"
           onClick={() => toggleSound()}
-          className={`inline-flex items-center gap-1 transition-colors cursor-pointer select-none whitespace-nowrap shrink-0 ${
-            isLight
+          className={`inline-flex items-center gap-1 transition-colors cursor-pointer select-none whitespace-nowrap shrink-0 ${isLight
               ? "text-neutral-600 hover:text-black"
               : "text-neutral-300 hover:text-white"
-          }`}
+            }`}
           aria-label="Toggle Audio Sound"
         >
           <svg
-            className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 transition-colors ${
-              soundOn ? "text-emerald-500" : isLight ? "text-neutral-500" : "text-neutral-400"
-            }`}
+            className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 transition-colors ${soundOn ? "text-emerald-500" : isLight ? "text-neutral-500" : "text-neutral-400"
+              }`}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

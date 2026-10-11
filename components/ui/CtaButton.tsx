@@ -33,8 +33,8 @@ export default function CtaButton({
     shape === "square"
       ? "rounded-none"
       : shape === "pill"
-      ? "rounded-full"
-      : "rounded-lg";
+        ? "rounded-full"
+        : "rounded-lg";
 
   const baseClasses = `group relative inline-flex items-center justify-center font-mono text-xs sm:text-[13px] tracking-widest uppercase font-semibold px-8 py-4 select-none cursor-pointer overflow-hidden transition-colors duration-300 ${shapeClasses} ${className}`;
 

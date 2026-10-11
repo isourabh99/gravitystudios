@@ -61,11 +61,10 @@ export default function CustomSelect({
                 onChange(opt);
                 setIsOpen(false);
               }}
-              className={`px-4 py-2.5 text-sm font-mg12-regular cursor-pointer transition-colors flex items-center justify-between ${
-                opt === value
+              className={`px-4 py-2.5 text-sm font-mg12-regular cursor-pointer transition-colors flex items-center justify-between ${opt === value
                   ? "bg-neutral-100 text-black font-medium"
                   : "text-neutral-700 hover:bg-neutral-50 hover:text-black"
-              }`}
+                }`}
             >
               <span>{opt}</span>
               {opt === value && <span className="text-xs">✓</span>}
