@@ -88,7 +88,7 @@ const SERVICE_DETAILS: ServiceDetail[] = [
 ];
 
 export default function DetailedServicesList() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggleAccordion = (idx: number) => {
     setOpenIndex(openIndex === idx ? null : idx);
