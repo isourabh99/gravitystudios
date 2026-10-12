@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="8" fill="#000000" />
+  
+  <!-- Glowing Dot -->
+  <circle cx="16" cy="11" r="2.5" fill="#F4F4F0" />
+  
+  <!-- Letter 'g' -->
+  <text x="16" y="26" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="19" fill="#F4F4F0" text-anchor="middle">g</text>
+</svg>

@@ -23,6 +23,11 @@ export default function UniversalLoaderWrapper({
 
   // Trigger loader on mount and route changes
   useEffect(() => {
+    window.scrollTo(0, 0);
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true });
+    }
+
     if (isFirstMount.current) {
       isFirstMount.current = false;
       setLoading(true);
@@ -31,7 +36,7 @@ export default function UniversalLoaderWrapper({
 
     // Client-side route changes
     setLoading(true);
-  }, [pathname]);
+  }, [pathname, lenis]);
 
   useEffect(() => {
     if (loading) {
@@ -39,7 +44,11 @@ export default function UniversalLoaderWrapper({
       if (lenis) lenis.stop();
     } else {
       document.body.style.overflow = "";
-      if (lenis) lenis.start();
+      if (lenis) {
+        lenis.start();
+        lenis.scrollTo(0, { immediate: true });
+      }
+      window.scrollTo(0, 0);
     }
   }, [loading, lenis]);
 

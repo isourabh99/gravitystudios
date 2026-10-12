@@ -84,8 +84,8 @@ export default function ClientsMarquee({
   className = "",
   speedSeconds = 25,
 }: ClientsMarqueeProps) {
-  // Repeating array twice creates seamless infinite loop (-50% translation)
-  const repeatedClients = [...CLIENTS, ...CLIENTS];
+  // Repeating array twice per track block ensures plenty of elements across all viewport widths
+  const items = [...CLIENTS, ...CLIENTS];
 
   return (
     <div
@@ -98,17 +98,35 @@ export default function ClientsMarquee({
 
       {/* Marquee Track */}
       <div
-        className="animate-marquee flex items-center gap-12 sm:gap-20"
+        className="flex w-max animate-marquee"
         style={{ animationDuration: `${speedSeconds}s` }}
       >
-        {repeatedClients.map((client, idx) => (
-          <div
-            key={`${client.id}-${idx}`}
-            className="shrink-0 flex items-center justify-center"
-          >
-            {client.render()}
-          </div>
-        ))}
+        {/* Set 1 */}
+        <div className="flex shrink-0 items-center gap-12 sm:gap-20 pr-12 sm:pr-20">
+          {items.map((client, idx) => (
+            <div
+              key={`track1-${client.id}-${idx}`}
+              className="shrink-0 flex items-center justify-center"
+            >
+              {client.render()}
+            </div>
+          ))}
+        </div>
+
+        {/* Set 2 (Duplicates Set 1 for seamless infinite looping) */}
+        <div
+          className="flex shrink-0 items-center gap-12 sm:gap-20 pr-12 sm:pr-20"
+          aria-hidden="true"
+        >
+          {items.map((client, idx) => (
+            <div
+              key={`track2-${client.id}-${idx}`}
+              className="shrink-0 flex items-center justify-center"
+            >
+              {client.render()}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
