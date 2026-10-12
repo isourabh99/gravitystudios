@@ -13,7 +13,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Home");
-  const [isDarkBg, setIsDarkBg] = useState(() => (pathname?.startsWith("/contact") ? false : true));
+  const [isDarkBg, setIsDarkBg] = useState(() => (pathname?.startsWith("/contact") || pathname?.startsWith("/services") ? false : true));
   const { scrollY } = useScroll();
   const lenis = useSmoothScroll();
 
@@ -22,7 +22,7 @@ export default function Navbar() {
     if (typeof window === "undefined") return;
     const hash = window.location.hash;
     if (hash === "#projects") setActiveItem("Projects");
-    else if (hash === "#services") setActiveItem("Services");
+    else if (pathname === "/services" || hash === "#services") setActiveItem("Services");
     else if (hash === "#industries") setActiveItem("Industries");
     else if (hash === "#studio") setActiveItem("Studio");
     else if (hash === "#news") setActiveItem("News");
@@ -37,8 +37,8 @@ export default function Navbar() {
     const checkBgTheme = () => {
       if (typeof window === "undefined") return;
 
-      // Contact page is always light theme
-      if (pathname?.startsWith("/contact")) {
+      // Contact and Services pages start with light theme
+      if (pathname?.startsWith("/contact") || pathname?.startsWith("/services")) {
         setIsDarkBg(false);
         return;
       }
@@ -149,7 +149,7 @@ export default function Navbar() {
               {[
                 { name: "Projects", href: "/#projects" },
                 { name: "Studio", href: "/#studio" },
-                { name: "Services", href: "/#services" },
+                { name: "Services", href: "/services" },
               ].map((link) => (
                 <Link
                   key={link.name}
@@ -241,7 +241,7 @@ export default function Navbar() {
                 {[
                   { name: "Home", href: "/" },
                   { name: "Projects", href: "/#projects" },
-                  { name: "Services", href: "/#services" },
+                  { name: "Services", href: "/services" },
                   { name: "Industries", href: "/#industries" },
                   { name: "Studio", href: "/#studio" },
                   { name: "News", href: "/#news" },

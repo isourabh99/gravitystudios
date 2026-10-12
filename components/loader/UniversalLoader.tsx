@@ -37,6 +37,19 @@ export const LOADER_PAGE_CONFIGS: Record<string, LoaderConfig> = {
       "Drop us a message below.",
     ],
   },
+  "/services": {
+    topLeft: [
+      "Gravity Studios",
+      "Capabilities & Digital Systems",
+      "Web Design, 3D & AI Engineering",
+    ],
+    bottomRight: [
+      "Initializing services showcase...",
+      "Calibrating horizontal matrix...",
+      "Capabilities online.",
+      "Explore slides below.",
+    ],
+  },
   default: {
     topLeft: [
       "Gravity Studios",
