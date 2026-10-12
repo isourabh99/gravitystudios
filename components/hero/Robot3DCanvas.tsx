@@ -126,7 +126,7 @@ function useCrtScreenTexture() {
       // PHASE 2: Services menu matching reference image exactly
       const st = active - 3.0;
       ctx.font = "bold 20px 'Courier New', monospace";
-      ctx.fillStyle = "#e8402a";
+      ctx.fillStyle = "#ED3327";
       ctx.fillText("> services", 28, 55);
       ctx.fillRect(28, 62, 190, 2);
 
@@ -171,7 +171,7 @@ function useCrtScreenTexture() {
     ctx.fillStyle = "rgba(120,140,165,0.6)";
     ctx.fillText("JUNCA OS  v0.1", 28, H - 20);
     ctx.font = "bold 11px 'Courier New', monospace";
-    ctx.fillStyle = "#e8402a";
+    ctx.fillStyle = "#ED3327";
     ctx.fillText("AU REPCS", W - 105, H - 20);
 
     texture.needsUpdate = true;
