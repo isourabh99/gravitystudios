@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export interface CtaButtonProps {
   children: React.ReactNode;
-  variant?: "brand" | "outline" | "ghost";
+  variant?: "brand" | "outline" | "ghost" | "white";
   shape?: "square" | "pill" | "rounded";
   href?: string;
   className?: string;
@@ -55,7 +55,9 @@ export default function CtaButton({
   // Default black bg, on hover changes to #ED3327
   let variantClasses = "bg-black text-white hover:bg-[#ED3327]";
 
-  if (variant === "outline") {
+  if (variant === "white") {
+    variantClasses = "bg-white text-black hover:bg-[#ED3327] hover:text-white";
+  } else if (variant === "outline") {
     variantClasses = "border border-neutral-300 text-black hover:bg-[#ED3327] hover:text-white hover:border-[#ED3327]";
   } else if (variant === "ghost") {
     variantClasses = "text-neutral-700 hover:text-black hover:bg-neutral-100";

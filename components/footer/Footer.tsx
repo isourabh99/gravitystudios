@@ -72,7 +72,7 @@ export default function Footer() {
               <div className="space-y-1.5 flex flex-col items-start">
                 {[
                   { name: "Studio", href: "/#studio" },
-                  { name: "Our projects", href: "/#projects" },
+                  { name: "Our projects", href: "/projects" },
                   { name: "Our services", href: "/services" },
                   { name: "News", href: "/#news" },
                   { name: "Contact", href: "/contact" },
@@ -90,14 +90,14 @@ export default function Footer() {
               </span>
               <div className="space-y-1.5 flex flex-col items-start">
                 {[
-                  "BotBlox Systems",
-                  "Hylight",
-                  "Artefact area",
-                  "Une Autre Île Productions",
+                  { name: "Hylight", href: "/projects/hylight" },
+                  { name: "Artefact area", href: "/projects/artefact-area" },
+                  { name: "Une Autre Île Productions", href: "/projects/une-autre-ile" },
+                  { name: "BotBlox Systems", href: "/projects/botblox" },
                 ].map((proj) => (
-                  <span key={proj} className="block cursor-pointer">
-                    <ScrambleText text={proj} hoverColor="#ED3327" />
-                  </span>
+                  <Link key={proj.name} href={proj.href} className="block cursor-pointer">
+                    <ScrambleText text={proj.name} hoverColor="#ED3327" />
+                  </Link>
                 ))}
               </div>
             </div>

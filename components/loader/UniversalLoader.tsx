@@ -50,6 +50,19 @@ export const LOADER_PAGE_CONFIGS: Record<string, LoaderConfig> = {
       "Explore slides below.",
     ],
   },
+  "/projects": {
+    topLeft: [
+      "Gravity Studios",
+      "Selected Work & Case Studies",
+      "Websites, Brands & 3D for Tech",
+    ],
+    bottomRight: [
+      "Cataloguing active projects...",
+      "Loading high-fidelity media & assets...",
+      "Archive ready.",
+      "Explore work below.",
+    ],
+  },
   default: {
     topLeft: [
       "Gravity Studios",

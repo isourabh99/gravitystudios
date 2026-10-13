@@ -13,7 +13,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Home");
-  const [isDarkBg, setIsDarkBg] = useState(() => (pathname?.startsWith("/contact") || pathname?.startsWith("/services") ? false : true));
+  const [isDarkBg, setIsDarkBg] = useState(() => (pathname?.startsWith("/contact") || pathname?.startsWith("/services") || pathname?.startsWith("/projects") ? false : true));
   const { scrollY } = useScroll();
   const lenis = useSmoothScroll();
 
@@ -21,7 +21,7 @@ export default function Navbar() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const hash = window.location.hash;
-    if (hash === "#projects") setActiveItem("Projects");
+    if (pathname?.startsWith("/projects") || hash === "#projects") setActiveItem("Projects");
     else if (pathname === "/services" || hash === "#services") setActiveItem("Services");
     else if (hash === "#industries") setActiveItem("Industries");
     else if (hash === "#studio") setActiveItem("Studio");
@@ -37,8 +37,8 @@ export default function Navbar() {
     const checkBgTheme = () => {
       if (typeof window === "undefined") return;
 
-      // Contact and Services pages start with light theme
-      if (pathname?.startsWith("/contact") || pathname?.startsWith("/services")) {
+      // Contact, Services, and Projects pages start with light theme
+      if (pathname?.startsWith("/contact") || pathname?.startsWith("/services") || pathname?.startsWith("/projects")) {
         setIsDarkBg(false);
         return;
       }
@@ -147,7 +147,7 @@ export default function Navbar() {
             {/* Column 1 */}
             <div className="flex flex-col space-y-2">
               {[
-                { name: "Projects", href: "/#projects" },
+                { name: "Projects", href: "/projects" },
                 { name: "Studio", href: "/#studio" },
                 { name: "Services", href: "/services" },
               ].map((link) => (
@@ -240,7 +240,7 @@ export default function Navbar() {
               <div className="py-2 sm:py-3 space-y-1 sm:space-y-1.5 md:space-y-2">
                 {[
                   { name: "Home", href: "/" },
-                  { name: "Projects", href: "/#projects" },
+                  { name: "Projects", href: "/projects" },
                   { name: "Services", href: "/services" },
                   { name: "Industries", href: "/#industries" },
                   { name: "Studio", href: "/#studio" },

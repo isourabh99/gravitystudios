@@ -97,7 +97,7 @@ export default function DetailedServicesList() {
   return (
     <section
       id="all-services"
-      className="relative w-full bg-[#F4F4F0] text-neutral-900 px-6 sm:px-12 lg:px-16 py-20 sm:py-28 border-t border-neutral-300 select-none"
+      className="relative w-full bg-[#F4F4F0] text-neutral-900 px-6 sm:px-12 py-20 sm:py-28 border-t border-neutral-300 select-none"
     >
       <div className="max-w-8xl mx-auto w-full">
         {/* Section Header */}
