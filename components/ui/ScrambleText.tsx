@@ -15,7 +15,7 @@ export interface ScrambleTextProps {
 }
 
 export default function ScrambleText({
-  text,
+  text = "",
   className = "",
   hoverColor = "#ED3327",
   autoPlay = false,
@@ -23,27 +23,37 @@ export default function ScrambleText({
   speed = 0.5,
   onComplete,
 }: ScrambleTextProps) {
-  const [displayText, setDisplayText] = useState(autoPlay ? "" : text);
+  const safeText = text || "";
+  const [displayText, setDisplayText] = useState(autoPlay ? "" : safeText);
   const [isHovered, setIsHovered] = useState(false);
   const frameRef = useRef<number | null>(null);
+  const onCompleteRef = useRef(onComplete);
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   const startScramble = useCallback(() => {
+    if (!safeText) {
+      setDisplayText("");
+      return;
+    }
     if (hoverColor && interactive) setIsHovered(true);
     let iteration = 0;
-    const maxIterations = text.length;
+    const maxIterations = safeText.length;
 
     if (frameRef.current) cancelAnimationFrame(frameRef.current);
 
     const step = () => {
       setDisplayText(
-        text
+        safeText
           .split("")
           .map((char, index) => {
             if (char === " " || char === ":" || char === "+" || char === "@" || char === "." || char === "—" || char === ",") {
               return char;
             }
             if (index < iteration) {
-              return text[index];
+              return safeText[index];
             }
             return CHARS[Math.floor(Math.random() * CHARS.length)];
           })
@@ -54,32 +64,34 @@ export default function ScrambleText({
         iteration += speed;
         frameRef.current = requestAnimationFrame(step);
       } else {
-        setDisplayText(text);
-        if (onComplete) onComplete();
+        setDisplayText(safeText);
+        if (onCompleteRef.current) onCompleteRef.current();
       }
     };
 
     frameRef.current = requestAnimationFrame(step);
-  }, [text, hoverColor, interactive, speed, onComplete]);
+  }, [safeText, hoverColor, interactive, speed]);
 
   const stopScramble = useCallback(() => {
     if (interactive) {
       setIsHovered(false);
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
-      setDisplayText(text);
+      setDisplayText(safeText);
     }
-  }, [interactive, text]);
+  }, [interactive, safeText]);
 
   useEffect(() => {
     if (autoPlay) {
       startScramble();
     } else {
-      setDisplayText(text);
+      setDisplayText(safeText);
     }
     return () => {
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
     };
-  }, [autoPlay, text, startScramble]);
+    // Only trigger scramble when safeText changes or on mount (slide change)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoPlay, safeText]);
 
   return (
     <span

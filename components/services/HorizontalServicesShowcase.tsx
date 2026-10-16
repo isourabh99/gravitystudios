@@ -489,7 +489,7 @@ export default function HorizontalServicesShowcase() {
 
   const handleDiscoverClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    const targetEl = document.getElementById("all-services");
+    const targetEl = document.getElementById("industries") || document.getElementById("all-services");
     if (targetEl) {
       if (lenis) {
         lenis.scrollTo(targetEl, { duration: 1.2 });
@@ -525,7 +525,7 @@ export default function HorizontalServicesShowcase() {
 
           <div className="pointer-events-auto">
             <CtaButton
-              href="#all-services"
+              href="#industries"
               variant="brand"
               onClick={handleDiscoverClick}
               className="shadow-md"
