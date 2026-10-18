@@ -10,67 +10,85 @@ interface ClientItem {
 
 const CLIENTS: ClientItem[] = [
   {
-    id: "hylight",
-    name: "HyLight",
+    id: "sutra",
+    name: "Sutra CRM",
     render: () => (
       <span className="font-mg12-bold text-xl sm:text-2xl font-bold tracking-tight text-white hover:text-[#ED3327] transition-colors cursor-pointer select-none">
-        HyLight
+        Sutra CRM
       </span>
     ),
   },
   {
-    id: "skipper-ndt",
-    name: "SKIPPER NDT",
+    id: "indus",
+    name: "INDUS LUXE",
     render: () => (
       <span className="font-mg12-bold text-base sm:text-lg font-bold tracking-widest text-white uppercase hover:text-[#ED3327] transition-colors cursor-pointer select-none">
-        SKIPPER NDT
+        INDUS LUXE
       </span>
     ),
   },
   {
-    id: "blink",
-    name: "blink",
+    id: "sarva",
+    name: "Sarva CMS",
     render: () => (
       <div className="flex items-center gap-1.5 group/logo hover:text-[#ED3327] transition-colors cursor-pointer select-none">
         <span className="w-4 h-4 rounded bg-white flex items-center justify-center text-black text-[10px] font-bold transition-all group-hover/logo:bg-[#ED3327] group-hover/logo:text-white">
           ◇
         </span>
         <span className="font-mg12-bold text-xl sm:text-2xl font-bold tracking-tight text-white group-hover/logo:text-[#ED3327] transition-colors">
-          blink
+          Sarva CMS
         </span>
       </div>
     ),
   },
   {
-    id: "alta",
-    name: "alt a",
+    id: "kala",
+    name: "Kala Studio",
     render: () => (
       <span className="font-mg12-bold text-xl sm:text-2xl font-bold text-white tracking-tight hover:text-[#ED3327] transition-colors cursor-pointer select-none">
-        alt a
+        Kala Studio
       </span>
     ),
   },
   {
-    id: "artefact",
-    name: "artefact",
+    id: "kosh",
+    name: "Kosh Wealth",
     render: () => (
       <span className="font-mg12-regular text-xl sm:text-2xl text-white tracking-tight hover:text-[#ED3327] transition-colors cursor-pointer select-none">
-        artefact
+        Kosh Wealth
       </span>
     ),
   },
   {
-    id: "botblox",
-    name: "BotBlox Systems",
+    id: "pravaah",
+    name: "Pravaah Logistics",
     render: () => (
       <div className="flex items-center gap-1.5 group/logo hover:text-[#ED3327] transition-colors cursor-pointer select-none">
         <span className="font-mono font-bold text-base text-white group-hover/logo:text-[#ED3327] transition-colors">
           ❖
         </span>
         <span className="font-mg12-bold text-base sm:text-lg font-bold text-white tracking-tight group-hover/logo:text-[#ED3327] transition-colors">
-          BotBlox Systems
+          Pravaah Logistics
         </span>
       </div>
+    ),
+  },
+  {
+    id: "veda",
+    name: "Veda Health",
+    render: () => (
+      <span className="font-mg12-bold text-xl sm:text-2xl font-bold text-white tracking-tight hover:text-[#ED3327] transition-colors cursor-pointer select-none">
+        Veda Health
+      </span>
+    ),
+  },
+  {
+    id: "drishti",
+    name: "Drishti AI",
+    render: () => (
+      <span className="font-mg12-bold text-xl sm:text-2xl font-bold text-white tracking-tight hover:text-[#ED3327] transition-colors cursor-pointer select-none">
+        Drishti AI
+      </span>
     ),
   },
 ];

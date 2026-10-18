@@ -13,7 +13,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Home");
-  const [isDarkBg, setIsDarkBg] = useState(() => (pathname?.startsWith("/contact") || pathname?.startsWith("/services") || pathname?.startsWith("/projects") ? false : true));
+  const [isDarkBg, setIsDarkBg] = useState(() => (pathname?.startsWith("/contact") || pathname?.startsWith("/services") ? false : true));
   const { scrollY } = useScroll();
   const lenis = useSmoothScroll();
 
@@ -37,8 +37,16 @@ export default function Navbar() {
     const checkBgTheme = () => {
       if (typeof window === "undefined") return;
 
-      // Contact, Services, and Projects pages start with light theme
-      if (pathname?.startsWith("/contact") || pathname?.startsWith("/services") || pathname?.startsWith("/projects")) {
+      // On /projects page: Top 100vh hero banner is dark, below that is light
+      if (pathname?.startsWith("/projects")) {
+        const threshold = window.innerHeight - 80;
+        const currentScroll = window.scrollY || (lenis ? lenis.scroll : 0);
+        setIsDarkBg(currentScroll < threshold);
+        return;
+      }
+
+      // Contact and Services pages start with light theme
+      if (pathname?.startsWith("/contact") || pathname?.startsWith("/services")) {
         setIsDarkBg(false);
         return;
       }
@@ -131,17 +139,17 @@ export default function Navbar() {
   return (
     <>
       {/* Fixed Main Header matching Screenshot 1 */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-12 py-6 select-none pointer-events-auto transition-colors duration-300">
+      <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-12 py-6 select-none pointer-events-none transition-colors duration-300">
         <nav className="max-w-8xl mx-auto flex items-start justify-between">
           {/* Top Left Logo (Adapts to black on light backgrounds, white on dark backgrounds) */}
-          <div className="flex items-center">
+          <div className="flex items-center pointer-events-auto">
             <GravityLogo showLink={true} isDark={!isDarkBg} textSize="text-xl sm:text-2xl" />
           </div>
 
           {/* Center 2-Column Links Layout (Slides up & fades out on scroll, color adapts to background) */}
           <motion.div
             style={{ y: linksY, opacity: linksOpacity }}
-            className={`hidden md:flex items-start gap-14 lg:gap-16 text-sm sm:text-[15px] font-mg12-regular font-light transition-colors duration-300 ${isDarkBg ? "text-neutral-300" : "text-neutral-700"
+            className={`hidden md:flex items-start gap-14 lg:gap-16 text-sm sm:text-[15px] font-mg12-regular font-light transition-colors duration-300 pointer-events-auto ${isDarkBg ? "text-neutral-300" : "text-neutral-700"
               }`}
           >
             {/* Column 1 */}
@@ -189,7 +197,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
-            className={`group p-2 flex flex-col items-end justify-center gap-1.5 cursor-pointer focus:outline-none transition-colors duration-300 ${isDarkBg ? "text-white" : "text-black"
+            className={`group p-2 flex flex-col items-end justify-center gap-1.5 cursor-pointer focus:outline-none transition-colors duration-300 pointer-events-auto ${isDarkBg ? "text-white" : "text-black"
               }`}
             aria-label="Open Navigation Menu"
           >
@@ -282,10 +290,10 @@ export default function Navbar() {
                     </span>
                     <div className="space-y-1.5 text-neutral-900 font-mg12-regular text-sm sm:text-[15px] flex flex-col items-start">
                       {[
-                        "BotBlox [DeepTech]",
-                        "Hylight [DeepTech]",
-                        "Skipper NDT [DeepTech]",
-                        "Kestrix [Climate]",
+                        "Sutra CRM [Enterprise CRM]",
+                        "Indus Luxe [E-Commerce]",
+                        "Sarva CMS [Headless CMS]",
+                        "Kala Studio [Portfolio]",
                       ].map((proj) => (
                         <span key={proj} className="block cursor-pointer">
                           <ScrambleText text={proj} hoverColor="#ED3327" />

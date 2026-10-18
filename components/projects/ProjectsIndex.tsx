@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { PROJECTS, Project } from "@/data/projectsData";
-import ProjectsHero from "@/components/projects/ProjectsHero";
+import ProjectsHeroBanner from "@/components/projects/ProjectsHeroBanner";
 import ViewModeToggle from "@/components/projects/ViewModeToggle";
 import ProjectListRow from "@/components/projects/ProjectListRow";
 import ProjectGridCard from "@/components/projects/ProjectGridCard";
@@ -12,28 +12,45 @@ import CtaButton from "@/components/ui/CtaButton";
 export default function ProjectsIndex() {
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [activeProjectNumber, setActiveProjectNumber] = useState<string>("01");
+  const indexSectionRef = useRef<HTMLDivElement>(null);
+
+  const scrollToExplore = () => {
+    if (indexSectionRef.current) {
+      indexSectionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
-    <section className="relative w-full bg-[#F4F4F0] text-neutral-900 px-6 sm:px-12 pt-32 sm:pt-40 pb-24 sm:pb-32 select-none font-sans">
-      <div className="max-w-8xl mx-auto w-full">
-        {/* 1. HERO SECTION: Separate ProjectsHero component with on-load scramble text */}
-        <ProjectsHero projectCount={PROJECTS.length} />
+    <div className="relative w-full">
+      {/* 1. 100VH DARK HERO BANNER (Vector dots, live clock, scramble headline, 3D wave video slides) */}
+      <ProjectsHeroBanner
+        onSelectProject={setSelectedProject}
+        onExploreClick={scrollToExplore}
+      />
 
-        {/* 2. CONTROL BAR & VIEW SWITCHER (List vs Grid) */}
-        <div className="py-6 sm:py-8 flex items-center justify-between border-b border-neutral-300">
-          <span className="font-mono text-xs sm:text-[13px] tracking-[0.2em] text-neutral-500 uppercase">
-            INDEX · 08 PROJECTS
-          </span>
-
-          <div className="flex items-center gap-3">
-            <span className="font-mono text-xs text-neutral-500 uppercase tracking-wider select-none">
-              VIEW
+      {/* 2. PROJECTS INDEX SECTION */}
+      <section
+        ref={indexSectionRef}
+        id="projects-index"
+        className="relative w-full bg-[#F4F4F0] text-neutral-900 px-6 sm:px-12 pt-16 sm:pt-20 pb-24 sm:pb-32 select-none font-sans"
+      >
+        <div className="max-w-8xl mx-auto w-full">
+          {/* CONTROL BAR & VIEW SWITCHER (List vs Grid) */}
+          <div className="py-6 sm:py-8 flex items-center justify-between border-b border-neutral-300">
+            <span className="font-mono text-xs sm:text-[13px] tracking-[0.2em] text-neutral-500 uppercase">
+              INDEX · 08 PROJECTS
             </span>
 
-            {/* Reusable Sharp Animated ViewModeToggle */}
-            <ViewModeToggle value={viewMode} onChange={setViewMode} />
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-xs text-neutral-500 uppercase tracking-wider select-none">
+                VIEW
+              </span>
+
+              {/* Reusable Sharp Animated ViewModeToggle */}
+              <ViewModeToggle value={viewMode} onChange={setViewMode} />
+            </div>
           </div>
-        </div>
 
         {/* 3. PROJECTS DISPLAY: LIST OR GRID */}
         {viewMode === "list" ? (
@@ -43,6 +60,8 @@ export default function ProjectsIndex() {
               <ProjectListRow
                 key={project.number}
                 project={project}
+                isActive={activeProjectNumber === project.number}
+                onActivate={() => setActiveProjectNumber(project.number)}
                 onSelect={setSelectedProject}
               />
             ))}
@@ -90,6 +109,7 @@ export default function ProjectsIndex() {
         />
       </div>
     </section>
-  );
+  </div>
+);
 }
 

@@ -146,6 +146,13 @@ export default function IndustryDetailDrawer({
 }: IndustryDetailDrawerProps) {
   const [hasScrolled, setHasScrolled] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const openedAtRef = useRef<number>(0);
+
+  useEffect(() => {
+    if (isOpen) {
+      openedAtRef.current = performance.now();
+    }
+  }, [isOpen]);
 
   // Reset scroll & scramble state when drawer opens or industry changes
   useEffect(() => {
@@ -171,8 +178,6 @@ export default function IndustryDetailDrawer({
     };
   }, [isOpen, onClose]);
 
-  if (!industry) return null;
-
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const top = e.currentTarget.scrollTop;
     if (!hasScrolled && top > 6) {
@@ -188,6 +193,17 @@ export default function IndustryDetailDrawer({
     }
   };
 
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    // Prevent synthetic ghost click from touch release that just opened the drawer
+    if (performance.now() - openedAtRef.current < 450) {
+      return;
+    }
+    onClose();
+  };
+
+  if (!industry) return null;
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -199,7 +215,7 @@ export default function IndustryDetailDrawer({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            onClick={onClose}
+            onClick={handleBackdropClick}
             className="fixed inset-0 z-[120] bg-black/50 backdrop-blur-[2px] cursor-pointer select-none"
             aria-hidden="true"
           />

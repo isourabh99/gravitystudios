@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "Selected work, digital products, and 3D web experiences for ambitious tech companies at pivotal moments. Case studies for HyLight, Artefact, Skipper NDT, blink, Alt-a, Kestrix, and BotBlox.",
+    "Selected work, digital products, and web experiences for ambitious companies. Case studies for Sutra CRM, Indus Luxe, Sarva CMS, Kala Studio, Kosh Wealth, Pravaah Logistics, Veda Health, and Drishti AI.",
   alternates: {
     canonical: "/projects",
   },

@@ -10,19 +10,19 @@ export interface ProjectMediaItem {
 
 export interface Project {
   number: string; // "01", "02", ...
-  slug: string; // "hylight", "artefact-area", ...
+  slug: string; // "sutra-crm", "indus-luxe", ...
   title: string;
   client: string;
-  category: string; // "DeepTech", "Creative studio", ...
+  category: string; // "Enterprise CRM", "D2C E-Commerce", ...
   tagline: string;
   description: string;
   year: string;
   location: string;
-  projectType: string; // "SHOWCASE WEBSITE", "LANDING PAGE", ...
-  metaString: string; // "SHOWCASE WEBSITE · PARIS, FRANCE · 2025"
+  projectType: string;
+  metaString: string;
   liveUrl?: string;
 
-  // Media: exactly 1 Video + 2 Images as requested
+  // Media: exactly 1 Video + 2 Images (1 Desktop Website + 1 Responsive Application)
   video: ProjectMediaItem;
   images: [ProjectMediaItem, ProjectMediaItem];
 
@@ -41,529 +41,564 @@ export interface Project {
 }
 
 export const PROJECTS: Project[] = [
-  // 01. Hylight
+  // 01. Sutra CRM
   {
     number: "01",
-    slug: "hylight",
-    title: "Hylight",
-    client: "HyLight",
-    category: "DeepTech",
-    tagline: "Hylight: an aerial inspection technology driven by design.",
+    slug: "sutra-crm",
+    title: "Sutra CRM",
+    client: "Sutra Technologies",
+    category: "Enterprise CRM",
+    tagline: "AI-native sales intelligence & relationship management platform for modern enterprises.",
     description:
-      "Designing a brand identity and high-impact showcase website for an autonomous, zero-emission hydrogen airship that inspects power lines and pipeline infrastructure at scale.",
+      "A high-velocity enterprise CRM engineered for Indian B2B tech giants, featuring real-time pipeline telemetry, WhatsApp business integrations, and automated deal scoring.",
     year: "2025",
-    location: "Paris, France",
-    projectType: "SHOWCASE WEBSITE",
-    metaString: "SHOWCASE WEBSITE · PARIS, FRANCE · 2025",
-    liveUrl: "https://hylight.aero",
+    location: "Bengaluru, India",
+    projectType: "ENTERPRISE CRM PLATFORM",
+    metaString: "ENTERPRISE CRM · BENGALURU, INDIA · 2025",
+    liveUrl: "https://sutracrm.in",
 
     video: {
-      id: "hylight-video-1",
-      type: "video",
-      src: "https://assets.mixkit.co/videos/preview/mixkit-drone-flying-over-a-dense-green-forest-41551-large.mp4",
-      poster: "/projects/hylight-poster.jpg",
-      alt: "HyLight autonomous airship scanning forest pipeline infrastructure",
-      caption: "AUTONOMOUS AIRSHIP FLIGHT OVER CANOPY",
-      tag: "4K SIMULATION",
-    },
-    images: [
-      {
-        id: "hylight-img-1",
-        type: "image",
-        src: "/projects/hylight-wireframe.svg",
-        alt: "HyLight wireframe radar telemetry beam and 3D sensor simulation",
-        caption: "TELEMETRY BEAM & 3D SENSOR MATRIX",
-        tag: "WEBGL 3D",
-      },
-      {
-        id: "hylight-img-2",
-        type: "image",
-        src: "/projects/hylight-landscape.svg",
-        alt: "HyLight zero-emission blimp soaring above alpine ridges",
-        caption: "ZERO-EMISSION AERIAL INSPECTION",
-        tag: "BRAND SYSTEM",
-      },
-    ],
-
-    overview:
-      "HyLight develops hydrogen-powered airships capable of inspecting hundreds of kilometers of transmission grids and pipelines without carbon emissions. They approached us to build an authoritative digital presence that would convince both enterprise energy conglomerates and Tier-1 deep-tech venture investors.",
-    challenge:
-      "The primary obstacle was balancing technical precision with cinematic emotion. HyLight's technology is complex hardware; the website needed to feel like cutting-edge aerospace engineering without alienating non-technical decision-makers.",
-    solution:
-      "We engineered a custom interactive 3D WebGL model of the airship, coupled with real-time flight telemetry visualizations and responsive micro-animations in Next.js. The typography is clinical yet confident, establishing instant credibility.",
-    deliverables: [
-      "Brand Identity & Typography Guidelines",
-      "Interactive 3D WebGL Airship Viewer",
-      "Next.js 16 High-Performance Showcase Website",
-      "Motion Direction & UI Sound Architecture",
-      "Investor Pitch Deck Templates",
-    ],
-    technologies: ["Next.js 16", "Three.js", "WebGL Shaders", "Tailwind CSS", "Framer Motion", "Lenis"],
-    results: [
-      { value: "€3.7M", label: "Seed Capital Secured Post-Launch" },
-      { value: "99.8%", label: "Google Lighthouse Performance Score" },
-      { value: "4.2x", label: "Increase in Enterprise Inbound Enquiries" },
-    ],
-    clientQuote: {
-      quote:
-        "Gravity transformed our perception from a hardware lab prototype into a global aerospace contender. The website was instrumental in closing our institutional seed round.",
-      author: "Martin Laroche",
-      role: "CEO & Co-Founder, HyLight",
-    },
-  },
-
-  // 02. Artefact area
-  {
-    number: "02",
-    slug: "artefact-area",
-    title: "Artefact area",
-    client: "Artefact",
-    category: "Creative studio",
-    tagline: "Building the showcase website for Artefact, a space for their creative work.",
-    description:
-      "A dark, tactile digital gallery showcasing sculptural spatial media, stone textures, and avant-garde art direction for an international creative powerhouse.",
-    year: "2025",
-    location: "Nantes, France",
-    projectType: "SHOWCASE WEBSITE, PORTFOLIO",
-    metaString: "SHOWCASE WEBSITE, PORTFOLIO · NANTES, FRANCE · 2025",
-    liveUrl: "https://artefactarea.com",
-
-    video: {
-      id: "artefact-video-1",
-      type: "video",
-      src: "https://assets.mixkit.co/videos/preview/mixkit-cracked-earth-surface-in-a-desert-41554-large.mp4",
-      poster: "/projects/artefact-poster.jpg",
-      alt: "Artefact organic stone texture and geological macro landscape",
-      caption: "GEOLOGICAL FORMATIONS & AMBIENT TEXTURE",
-      tag: "GENERATIVE VIDEO",
-    },
-    images: [
-      {
-        id: "artefact-img-1",
-        type: "image",
-        src: "/projects/artefact-moss.svg",
-        alt: "Artefact exploring unknown areas mossy rock formation",
-        caption: "EXPLORING UNKNOWN AREAS · ORGANIC TERRAIN",
-        tag: "MACRO CAPTURE",
-      },
-      {
-        id: "artefact-img-2",
-        type: "image",
-        src: "/projects/artefact-blur.svg",
-        alt: "Dynamic kinetic blur motion typography in nature",
-        caption: "KINETIC BLUR & EDITORIAL MOTION STUDY",
-        tag: "SPATIAL MEDIA",
-      },
-    ],
-
-    overview:
-      "Artefact is a collective of sculptors, digital artists, and spatial designers. They required an uncompromising portfolio website that felt more like stepping inside a contemporary concrete gallery pavilion than browsing a conventional web layout.",
-    challenge:
-      "Portfolios often struggle with visual clutter. Artefact's rich multimedia work required a design language that stepped back, allowing heavy stone textures, organic audio, and cinematic video to command the screen.",
-    solution:
-      "We conceived a horizontal flow with custom inertia damping, subtle audio responsive cues, and full-bleed image sequences. Text is treated as sparse architectural signage.",
-    deliverables: [
-      "Custom Inertial Horizontal Gallery Experience",
-      "Dynamic Media CMS with Video Pre-Loading",
-      "Bespoke Spatial Typography Grid",
-      "Interactive Curatorial Filtering System",
-    ],
-    technologies: ["Astro", "WebGL", "Lenis Smooth Scroll", "Tailwind CSS", "TypeScript"],
-    results: [
-      { value: "62%", label: "Average Session Duration Increase" },
-      { value: "0.4s", label: "Largest Contentful Paint (LCP)" },
-      { value: "2", label: "Awwwards Site of the Day Recognitions" },
-    ],
-    clientQuote: {
-      quote:
-        "Our digital space now matches the gravity and stillness of our physical sculptures. It is rare to find a studio that understands weight and typography with such precision.",
-      author: "Camille Durand",
-      role: "Creative Director, Artefact",
-    },
-  },
-
-  // 03. Une Autre Île Productions
-  {
-    number: "03",
-    slug: "une-autre-ile",
-    title: "Une Autre Île Productions",
-    client: "Une Autre Île",
-    category: "Production studio",
-    tagline: "Crafting a digital experience for luxury film and high-end commercial production.",
-    description:
-      "A cinematic, typography-focused showcase for an elite commercial film production house working across Parisian haute couture, fragrance, and architecture.",
-    year: "2025",
-    location: "Paris, France",
-    projectType: "LANDING PAGE",
-    metaString: "LANDING PAGE · PARIS, FRANCE · 2025",
-    liveUrl: "https://uneautreile.fr",
-
-    video: {
-      id: "uneautreile-video-1",
-      type: "video",
-      src: "https://assets.mixkit.co/videos/preview/mixkit-luxury-perfume-bottle-with-water-droplets-41552-large.mp4",
-      poster: "/projects/uneautreile-poster.jpg",
-      alt: "Une Autre Île luxury perfume glass bottle and high-gloss lighting",
-      caption: "HAUTE COUTURE COMMERCIAL REEL",
-      tag: "FILM PRODUCTION",
-    },
-    images: [
-      {
-        id: "uneautreile-img-1",
-        type: "image",
-        src: "/projects/uneautreile-monochrome.svg",
-        alt: "Hypnotic concentric circular typography and radial lens ripple",
-        caption: "GET STARTED WITH US · HYPNOTIC RIPPLE",
-        tag: "INTERACTIVE SHADER",
-      },
-      {
-        id: "uneautreile-img-2",
-        type: "image",
-        src: "/projects/uneautreile-red.svg",
-        alt: "Sculptural ruby red glass and luxury cosmetic visual grid",
-        caption: "PARISIAN RUNWAY & BEAUTY STILLS",
-        tag: "VISUAL IDENTITY",
-      },
-    ],
-
-    overview:
-      "Une Autre Île produces world-class commercials for international luxury fashion houses. Their digital home had to radiate Parisian elegance, editorial restraint, and instantaneous video playback.",
-    challenge:
-      "High-bitrate commercial reels typically lead to bloated website load times. We needed to display gigabytes of 4K cinematic reels without sacrificing instantaneous mobile responsiveness.",
-    solution:
-      "We engineered an adaptive video streaming pipeline with automatic bitrate switching, smooth custom cursor interactions, and an editorial grid that mirrors modern high-fashion magazines.",
-    deliverables: [
-      "Adaptive HLS Video Streaming Architecture",
-      "Full Screen Director Reel Player",
-      "Custom Micro-Interactions & Magnetic Buttons",
-      "Multilingual CMS (French / English)",
-    ],
-    technologies: ["Next.js 16", "Cloudflare Stream", "Framer Motion", "Tailwind CSS"],
-    results: [
-      { value: "100%", label: "Fluid 60 FPS Mobile Playback" },
-      { value: "3.5x", label: "Commercial Pitch Win Rate" },
-      { value: "0.2s", label: "Instant Video Start Time" },
-    ],
-  },
-
-  // 04. Skipper NDT
-  {
-    number: "04",
-    slug: "skipper-ndt",
-    title: "Skipper NDT",
-    client: "Skipper NDT",
-    category: "DeepTech",
-    tagline: "Designing a clear, technical interface for contactless magnetic inspection technology.",
-    description:
-      "A clean, technical interface and 3D data pipeline translating subterranean magnetic anomaly detection into an intuitive visual platform for global pipeline operators.",
-    year: "2025",
-    location: "Caen, France",
-    projectType: "SHOWCASE WEBSITE",
-    metaString: "SHOWCASE WEBSITE · CAEN, FRANCE · 2025",
-    liveUrl: "https://skipperndt.com",
-
-    video: {
-      id: "skipper-video-1",
-      type: "video",
-      src: "https://assets.mixkit.co/videos/preview/mixkit-radar-screen-with-moving-scanning-line-41553-large.mp4",
-      poster: "/projects/skipper-poster.jpg",
-      alt: "Skipper NDT magnetic field sensor scanning subterranean pipelines",
-      caption: "MAGNETIC FLUX LEAKAGE DETECTION",
-      tag: "REAL-TIME SENSOR",
-    },
-    images: [
-      {
-        id: "skipper-img-1",
-        type: "image",
-        src: "/projects/skipper-pipeline.svg",
-        alt: "Subterranean 3D pipeline trajectory and depth telemetry",
-        caption: "3D PIPELINE DEPTH TELEMETRY MATRIX",
-        tag: "GEOMETRY ENGINE",
-      },
-      {
-        id: "skipper-img-2",
-        type: "image",
-        src: "/projects/skipper-dashboard.svg",
-        alt: "High-contrast magnetic anomaly inspection charts",
-        caption: "CONTACTLESS MAGNETIC INSPECTION UI",
-        tag: "ANALYTICS UI",
-      },
-    ],
-
-    overview:
-      "Skipper NDT invented the world's first contactless magnetic inspection technology for buried pipelines. They needed a global website to present their scientific breakthroughs to multinational energy corporations and regulatory inspection authorities.",
-    challenge:
-      "The physics behind magnetic flux anomaly tracking is formidable. The website had to explain complex geophysical principles clearly in seconds through visual storytelling.",
-    solution:
-      "We built interactive 3D simulations showing how magnetic sensors pass over the earth's surface and detect micro-corrosions through soil and water without physical contact.",
-    deliverables: [
-      "Interactive 3D Subsurface Pipeline Simulator",
-      "Technical Whitepaper Download Hub",
-      "Case Study & Regulatory Compliance Architecture",
-      "Executive Product Presentation Kit",
-    ],
-    technologies: ["React 19", "Three.js", "WebGL", "Next.js", "Tailwind CSS"],
-    results: [
-      { value: "48+", label: "Countries Engaged with Technical Docs" },
-      { value: "99/100", label: "Accessibility (WCAG 2.1) Score" },
-      { value: "5.1x", label: "Direct RFP Request Growth" },
-    ],
-  },
-
-  // 05. blink
-  {
-    number: "05",
-    slug: "blink",
-    title: "blink",
-    client: "blink",
-    category: "SaaS & Media",
-    tagline: "Reimagining modern content workflows with micro-interactions and high-velocity UI.",
-    description:
-      "A lightning-fast, tactile product interface and brand experience built for modern video editing, AI transcript intelligence, and collaborative storytelling teams.",
-    year: "2025",
-    location: "San Francisco, USA",
-    projectType: "PRODUCT WEBSITE",
-    metaString: "PRODUCT WEBSITE · SAN FRANCISCO, USA · 2025",
-    liveUrl: "https://blink.media",
-
-    video: {
-      id: "blink-video-1",
+      id: "sutra-video-1",
       type: "video",
       src: "https://assets.mixkit.co/videos/preview/mixkit-hands-typing-code-on-a-laptop-41555-large.mp4",
-      poster: "/projects/blink-poster.jpg",
-      alt: "blink gesture-driven timeline interface and real-time audio waveforms",
-      caption: "REAL-TIME COLLABORATIVE TIMELINE",
-      tag: "SAAS PRODUCT",
+      poster: "/projects/sutra-poster.jpg",
+      alt: "Sutra CRM interactive pipeline management interface and real-time deal flow",
+      caption: "INTERACTIVE SALES PIPELINE & REAL-TIME AUTOMATION",
+      tag: "VIDEO DEMO",
     },
     images: [
       {
-        id: "blink-img-1",
+        id: "sutra-web",
         type: "image",
-        src: "/projects/blink-dashboard.svg",
-        alt: "Minimalist dark mode video editing dashboard with waveform nodes",
-        caption: "MINIMALIST WORKSPACE & WAVEFORM INTELLIGENCE",
-        tag: "DESIGN SYSTEM",
+        src: "/projects/sutra-web.jpg",
+        alt: "Sutra CRM Desktop Website featuring enterprise dashboard and pipeline overview",
+        caption: "DESKTOP WEBSITE · ENTERPRISE COMMAND CENTER",
+        tag: "DESKTOP WEB",
       },
       {
-        id: "blink-img-2",
+        id: "sutra-app",
         type: "image",
-        src: "/projects/blink-ai.svg",
-        alt: "Multi-track AI assistant dialogue and keyboard shortcut system",
-        caption: "HIGH-VELOCITY SHORTCUT ARCHITECTURE",
-        tag: "UI TOKENS",
+        src: "/projects/sutra-app.jpg",
+        alt: "Sutra CRM Responsive Mobile Application for field sales teams",
+        caption: "RESPONSIVE MOBILE APP · FIELD SALES TELEMETRY",
+        tag: "RESPONSIVE APP",
       },
     ],
 
     overview:
-      "blink is a Silicon Valley media-tech startup building the next generation of generative video editing software. They needed a product website that was as fast, fluid, and responsive as the tool itself.",
+      "Sutra CRM delivers next-generation customer relationship management specifically tailored for fast-scaling enterprises across India and Southeast Asia. We designed the unified design system, desktop command web portal, and responsive mobile application.",
     challenge:
-      "SaaS product landing pages have become formulaic. blink needed to stand out from typical pastel software sites and demonstrate unprecedented speed and aesthetic confidence.",
+      "Legacy CRM software is cluttered and slow on mobile. Sutra needed an interface that felt instantaneous, allowing field executives and C-suite leadership to log meetings, track ARR, and trigger workflows in under two taps.",
     solution:
-      "We engineered a dark, keyboard-friendly interface with interactive in-browser component mockups, sound design micro-cues, and live performance benchmarks.",
+      "We engineered a sleek, keyboard-first desktop web suite alongside a dedicated responsive mobile web application, backed by local-first offline caching and real-time pipeline synching.",
     deliverables: [
-      "Product Strategy & Value Proposition Hierarchy",
-      "Interactive Interactive Product Tour Component",
-      "Figma Tokens & Design System Implementation",
-      "Viral Waitlist & Referral Mechanism",
+      "End-to-End Design System & Token Architecture",
+      "Desktop Web Command Portal (Next.js 16)",
+      "High-Performance Responsive Mobile Web Application",
+      "Interactive Sales Pipeline & Analytics Dashboard",
     ],
-    technologies: ["Next.js 16", "Tailwind CSS", "Framer Motion", "TypeScript", "Vercel"],
+    technologies: ["Next.js 16", "React 19", "Tailwind CSS", "TypeScript", "Framer Motion", "TanStack Query"],
     results: [
-      { value: "140K+", label: "Organic Waitlist Signups in 30 Days" },
-      { value: "48ms", label: "Interaction to Next Paint (INP)" },
-      { value: "Top 3", label: "Product of the Day on Product Hunt" },
+      { value: "3.8x", label: "Faster Deal Closure Cycle" },
+      { value: "99.9%", label: "Mobile Sync Reliability in Low Connectivity" },
+      { value: "48ms", label: "Average Interaction Latency" },
     ],
+    clientQuote: {
+      quote:
+        "Gravity redefined how our sales reps and managers view CRM. The desktop and mobile app experience feels as responsive as a Bloomberg Terminal.",
+      author: "Aditya Vardhan",
+      role: "Chief Product Officer, Sutra Technologies",
+    },
   },
 
-  // 06. Alt-a
+  // 02. Indus Luxe
   {
-    number: "06",
-    slug: "alt-a",
-    title: "Alt-a",
-    client: "Alt-a",
-    category: "Strategy & Foresight",
-    tagline: "Building the landing page for Alt-a, a critical strategy and foresight agency.",
+    number: "02",
+    slug: "indus-luxe",
+    title: "Indus Luxe",
+    client: "Indus Heritage Craft",
+    category: "D2C E-Commerce",
+    tagline: "Luxury Indian artisanal craft & couture high-conversion headless e-commerce store.",
     description:
-      "A radical, monochromatic web experience that merges particle dynamics, speculative research, and brutalist typography for a strategic future consultancy.",
+      "A bespoke, high-fashion headless e-commerce store celebrating master Indian weavers, jewelers, and heritage textiles with cinematic typography and sub-second global checkout.",
     year: "2025",
-    location: "Paris, France",
-    projectType: "LANDING PAGE",
-    metaString: "LANDING PAGE · PARIS, FRANCE · 2025",
-    liveUrl: "https://alt-a.fr",
+    location: "Mumbai, India",
+    projectType: "HEADLESS D2C E-COMMERCE",
+    metaString: "HEADLESS E-COMMERCE · MUMBAI, INDIA · 2025",
+    liveUrl: "https://indusluxe.com",
 
     video: {
-      id: "alta-video-1",
+      id: "indus-video-1",
       type: "video",
-      src: "https://assets.mixkit.co/videos/preview/mixkit-spiral-of-glowing-particles-41550-large.mp4",
-      poster: "/projects/alta-poster.jpg",
-      alt: "Generative point-cloud particle nebula collapsing into gravitational lens",
-      caption: "GENERATIVE PARTICLE DISPERSION SHADER",
-      tag: "THREE.JS SHADER",
+      src: "https://assets.mixkit.co/videos/preview/mixkit-luxury-perfume-bottle-with-water-droplets-41552-large.mp4",
+      poster: "/projects/indus-poster.jpg",
+      alt: "Indus Luxe luxury couture collection editorial film and interactive storefront",
+      caption: "HIGH-JEWELRY & ARTISANAL COUTURE STOREFRONT REEL",
+      tag: "VIDEO DEMO",
     },
     images: [
       {
-        id: "alta-img-1",
+        id: "indus-web",
         type: "image",
-        src: "/projects/alta-lens.svg",
-        alt: "Spherical gravitational optical lens and stark typographic horizon",
-        caption: "GRAVITATIONAL OCULAR SINGULARITY",
-        tag: "POINT CLOUD",
+        src: "/projects/indus-web.jpg",
+        alt: "Indus Luxe Desktop Website editorial catalog and luxury product grid",
+        caption: "DESKTOP WEBSITE · HIGH-CONVERSION EDITORIAL STORE",
+        tag: "DESKTOP WEB",
       },
       {
-        id: "alta-img-2",
+        id: "indus-app",
         type: "image",
-        src: "/projects/alta-manifesto.svg",
-        alt: "Alt-a editorial essay interface with stark horizontal rules",
-        caption: "STRATEGIC FORESIGHT MANIFESTO",
-        tag: "BRUTALIST EDITORIAL",
+        src: "/projects/indus-app.jpg",
+        alt: "Indus Luxe Responsive Mobile Application with 1-click checkout experience",
+        caption: "RESPONSIVE MOBILE APP · FRICTIONLESS 1-TAP CHECKOUT",
+        tag: "RESPONSIVE APP",
       },
     ],
 
     overview:
-      "Alt-a advises governments and multinational corporate boards on geopolitical, technological, and environmental inflection points. They wanted a web manifestation that avoided generic consulting cliches in favor of avant-garde strategic gravitas.",
+      "Indus Luxe unites India's most celebrated heritage textile artisans and contemporary couture ateliers. They required an uncompromising digital flagship that rivaled Parisian luxury fashion houses while optimizing for multi-currency global transactions.",
     challenge:
-      "How do you convey 'foresight' without using stock imagery of crystal balls or generic futuristic cityscapes? We needed pure mathematical abstraction.",
+      "Traditional luxury fashion stores suffer from slow image rendering and clunky mobile cart drawers. The brand demanded editorial beauty without compromising load times or checkout velocity.",
     solution:
-      "We constructed an interactive particle field that reacts to cursor velocity, simulating complex systemic turbulence and equilibrium points, paired with stark Swiss typography.",
+      "We engineered a headless Shopify storefront using Next.js App Router, edge image caching, and a thumb-friendly responsive mobile checkout interface with instantaneous UPI and Stripe integration.",
     deliverables: [
-      "Custom Point Cloud Simulation Engine in Three.js",
-      "Interactive Strategic Foresight Timeline",
-      "Dynamic Reading Environment with Variable Typography",
-      "Minimalist Soundscape Cues",
+      "Headless E-Commerce Flagship Architecture",
+      "Dynamic Editorial Lookbook & Video Commerce Grid",
+      "Responsive Mobile Web Shopping Experience",
+      "Multi-Currency Global Checkout Engine",
     ],
-    technologies: ["Three.js", "GLSL Shaders", "Next.js 16", "Tailwind CSS"],
+    technologies: ["Shopify Storefront API", "Next.js 16", "Tailwind CSS", "Framer Motion", "Cloudflare CDN"],
     results: [
-      { value: "4.8m", label: "Average Time on Site for Long-Form Papers" },
-      { value: "100%", label: "Custom GPU Compute Shader Execution" },
-      { value: "1st", label: "Digital Vanguard Award Winner" },
+      { value: "+64%", label: "Increase in Mobile Checkout Conversion" },
+      { value: "0.4s", label: "Largest Contentful Paint (LCP)" },
+      { value: "€2.4M", label: "Gross Merchandise Value in Q1" },
     ],
-  },
-
-  // 07. Kestrix
-  {
-    number: "07",
-    slug: "kestrix",
-    title: "Kestrix",
-    client: "Kestrix",
-    category: "Climate Tech",
-    tagline: "Kestrix: making thermal data readable to accelerate building retrofit.",
-    description:
-      "An intuitive thermal intelligence platform turning drone infrared photography and heat-loss data into actionable building retrofit maps across the UK and Europe.",
-    year: "2026",
-    location: "London, United Kingdom",
-    projectType: "SHOWCASE WEBSITE",
-    metaString: "SHOWCASE WEBSITE · LONDON, UNITED KINGDOM · 2026",
-    liveUrl: "https://kestrix.ai",
-
-    video: {
-      id: "kestrix-video-1",
-      type: "video",
-      src: "https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-at-night-41556-large.mp4",
-      poster: "/projects/kestrix-poster.jpg",
-      alt: "Thermal infrared heatmap sweep across residential neighborhood",
-      caption: "ISOMETRIC THERMAL HEAT-LOSS SCAN",
-      tag: "CLIMATE DATA",
+    clientQuote: {
+      quote:
+        "The digital experience captured the soul and craftsmanship of Indian couture while converting international collectors with unmatched speed.",
+      author: "Meera Singhania",
+      role: "Founder & Creative Director, Indus Luxe",
     },
-    images: [
-      {
-        id: "kestrix-img-1",
-        type: "image",
-        src: "/projects/kestrix-houses.svg",
-        alt: "Isometric 3D roof cluster with energy-resilient retrofit intelligence",
-        caption: "ROOF-TOP THERMAL SIGNATURE CLUSTERING",
-        tag: "GEOSPATIAL AI",
-      },
-      {
-        id: "kestrix-img-2",
-        type: "image",
-        src: "/projects/kestrix-cards.svg",
-        alt: "Modular retrofit cards and building efficiency breakdown",
-        caption: "BUILDING RETROFIT INTELLIGENCE MODULES",
-        tag: "DATA DASHBOARD",
-      },
-    ],
-
-    overview:
-      "Buildings account for over a third of global carbon emissions through poor insulation. Kestrix uses drones with thermal cameras and computer vision to identify heat leaks across cities. They needed a platform to communicate this to housing associations, lenders, and cities.",
-    challenge:
-      "Thermal data is technical and dry in raw formats. The user experience needed to translate complex thermodynamics into immediate visual clarity.",
-    solution:
-      "We engineered interactive before-and-after thermal comparison sliders, animated heat signature spectrums, and a clear calculator for carbon reduction impact.",
-    deliverables: [
-      "Thermal Spectrum Interactive Visualization Component",
-      "Municipal Carbon Savings Calculator",
-      "B2B SaaS Lead Capture Funnel",
-      "Investor Pitch Architecture",
-    ],
-    technologies: ["Next.js 16", "Mapbox GL", "Tailwind CSS", "Framer Motion"],
-    results: [
-      { value: "£1.5M", label: "Innovate UK Grant & VC Inbound" },
-      { value: "40K+", label: "Homes Mapped in Pilot Municipalities" },
-      { value: "3.2x", label: "Growth in Housing Association Demos" },
-    ],
   },
 
-  // 08. BotBlox
+  // 03. Sarva CMS
   {
-    number: "08",
-    slug: "botblox",
-    title: "BotBlox",
-    client: "BotBlox",
-    category: "Robotics & Hardware",
-    tagline: "BotBlox: moving data where ethernet was never meant to go.",
+    number: "03",
+    slug: "sarva-cms",
+    title: "Sarva CMS",
+    client: "Sarva Media Networks",
+    category: "Headless CMS",
+    tagline: "Blazing-fast multilingual content publishing system built for digital newsrooms.",
     description:
-      "A high-density hardware platform and digital showcase for ultra-compact, ruggedized ethernet switches deployed in autonomous drones, Mars rovers, and defense systems.",
-    year: "2026",
-    location: "Sheffield, UK",
-    projectType: "ECOMMERCE & HARDWARE PLATFORM",
-    metaString: "ECOMMERCE & HARDWARE PLATFORM · SHEFFIELD, UK · 2026",
-    liveUrl: "https://botblox.io",
+      "A modern headless CMS and publishing engine engineered for high-volume Indian editorial teams publishing across 12 Indian regional languages simultaneously.",
+    year: "2025",
+    location: "New Delhi, India",
+    projectType: "HEADLESS CMS & PUBLISHING SYSTEM",
+    metaString: "HEADLESS CMS · NEW DELHI, INDIA · 2025",
+    liveUrl: "https://sarvacms.org",
 
     video: {
-      id: "botblox-video-1",
+      id: "sarva-video-1",
       type: "video",
       src: "https://assets.mixkit.co/videos/preview/mixkit-circuit-board-with-moving-electronic-signals-41557-large.mp4",
-      poster: "/projects/botblox-poster.jpg",
-      alt: "BotBlox micro ethernet switch 3D rotation and trace illumination",
-      caption: "RUGGEDIZED GIGABIT ETHERNET SWITCHING",
-      tag: "HARDWARE CAD",
+      poster: "/projects/sarva-poster.jpg",
+      alt: "Sarva CMS real-time collaborative editorial authoring and distribution network",
+      caption: "REAL-TIME COLLABORATIVE PUBLISHING PIPELINE",
+      tag: "VIDEO DEMO",
     },
     images: [
       {
-        id: "botblox-img-1",
+        id: "sarva-web",
         type: "image",
-        src: "/projects/botblox-radar.svg",
-        alt: "Compact mmWave radar topography for autonomous robotic platforms",
-        caption: "MMWAVE RADAR PLATFORM COMPATIBILITY",
-        tag: "TOPOGRAPHIC SIM",
+        src: "/projects/sarva-web.jpg",
+        alt: "Sarva CMS Desktop Website editorial authoring and SEO management console",
+        caption: "DESKTOP WEBSITE · MULTILINGUAL NEWSROOM CONSOLE",
+        tag: "DESKTOP WEB",
       },
       {
-        id: "botblox-img-2",
+        id: "sarva-app",
         type: "image",
-        src: "/projects/botblox-pcb.svg",
-        alt: "Exploded modular PCB assembly and industrial casing design",
-        caption: "MICRO-FOOTPRINT INDUSTRIAL HARDWARE",
-        tag: "PCB PIPELINE",
+        src: "/projects/sarva-app.jpg",
+        alt: "Sarva CMS Responsive Mobile Application for field journalists and editors",
+        caption: "RESPONSIVE MOBILE APP · LIVE BREAKING NEWS DISPATCH",
+        tag: "RESPONSIVE APP",
       },
     ],
 
     overview:
-      "BotBlox creates the world's smallest networking hardware for drones, autonomous rovers, and submersibles. Their hardware is trusted by NASA, Boeing, and autonomous vehicle innovators worldwide.",
+      "Sarva Media powers over 40 million monthly readers across diverse Indian languages. They partnered with us to overhaul their entire content authoring, asset management, and syndication infrastructure into an ultra-modern headless platform.",
     challenge:
-      "Engineers don't want marketing fluff—they want schematics, pinouts, and exact thermal specs. At the same time, the company needed to look like a world-class technology brand.",
+      "Newsroom editors were hindered by legacy monolithic CMS platforms that took minutes to publish breaking news updates and broke complex Indian language ligatures.",
     solution:
-      "We built a high-tech engineering platform featuring interactive 3D CAD board viewers, instant datasheet search, and streamlined global e-commerce checkout.",
+      "We built a clean, typography-focused headless CMS with live collaborative editing, automated SEO audits, and a companion responsive mobile publishing app for field correspondents.",
     deliverables: [
-      "Interactive 3D PCB CAD Viewer",
-      "Instant Datasheet & Pinout Documentation Hub",
-      "Global Hardware E-Commerce Experience",
-      "CAD Step File Download Engine",
+      "Custom Headless CMS Engine with Indian Typography Optimizations",
+      "Real-Time Collaborative Markdown & Block Editor",
+      "Responsive Journalist Mobile Dispatch Application",
+      "Automated Multi-Channel Syndication Webhooks",
     ],
-    technologies: ["Next.js 16", "Three.js", "Tailwind CSS", "Shopify Storefront API"],
+    technologies: ["Next.js 16", "Node.js", "PostgreSQL", "Tailwind CSS", "Redis", "Vercel"],
     results: [
-      { value: "65K+", label: "Units Deployed Across 70+ Countries" },
-      { value: "0.08s", label: "Instant Product Configuration Latency" },
-      { value: "85%", label: "Repeat Purchase Rate from Enterprise Engineers" },
+      { value: "10x", label: "Faster Publishing & Deploy Speed" },
+      { value: "40M+", label: "Monthly Active Readers Served" },
+      { value: "100%", label: "Lighthouse Performance Across Languages" },
     ],
+    clientQuote: {
+      quote:
+        "Sarva CMS cut our newsroom publishing latency from minutes to milliseconds. Our journalists can now break stories from their phones seamlessly.",
+      author: "Rajeshwar Rao",
+      role: "Managing Editor, Sarva Media",
+    },
+  },
+
+  // 04. Kala Studio
+  {
+    number: "04",
+    slug: "kala-studio",
+    title: "Kala Studio",
+    client: "Kala Architecture & Design",
+    category: "Creative Portfolio",
+    tagline: "Award-winning tactile spatial portfolio celebrating contemporary Indian architecture.",
+    description:
+      "An evocative digital portfolio website and spatial gallery showcasing sustainable stone monuments, brutalist residential villas, and architectural foresights.",
+    year: "2025",
+    location: "Ahmedabad, India",
+    projectType: "CREATIVE PORTFOLIO WEBSITE",
+    metaString: "PORTFOLIO WEBSITE · AHMEDABAD, INDIA · 2025",
+    liveUrl: "https://kalastudio.in",
+
+    video: {
+      id: "kala-video-1",
+      type: "video",
+      src: "https://assets.mixkit.co/videos/preview/mixkit-cracked-earth-surface-in-a-desert-41554-large.mp4",
+      poster: "/projects/kala-poster.jpg",
+      alt: "Kala Studio architectural walkthrough of raw exposed concrete and natural terracotta",
+      caption: "SPATIAL ARCHITECTURE REEL & GALLERY WALKTHROUGH",
+      tag: "VIDEO DEMO",
+    },
+    images: [
+      {
+        id: "kala-web",
+        type: "image",
+        src: "/projects/kala-web.jpg",
+        alt: "Kala Studio Desktop Website featuring monumental full-bleed architectural gallery",
+        caption: "DESKTOP WEBSITE · MONUMENTAL SPATIAL GALLERY",
+        tag: "DESKTOP WEB",
+      },
+      {
+        id: "kala-app",
+        type: "image",
+        src: "/projects/kala-app.jpg",
+        alt: "Kala Studio Responsive Mobile Application with smooth touch gestures and project drawers",
+        caption: "RESPONSIVE MOBILE APP · IMMERSIVE TOUCH EXHIBIT",
+        tag: "RESPONSIVE APP",
+      },
+    ],
+
+    overview:
+      "Kala Architecture is renowned for blending indigenous Indian masonry with radical modern brutalism. They needed a portfolio website that stood out globally and treated each architectural project as an artwork.",
+    challenge:
+      "High-resolution architectural photography frequently causes heavy page bloat. Kala required smooth, cinematic browsing across all devices with instant full-screen project drawers.",
+    solution:
+      "We crafted a horizontal inertial showcase with dark ambient backdrops, subtle sound design, and an adaptive responsive mobile exhibit that lets visitors swipe through floorplans and 3D renderings.",
+    deliverables: [
+      "Bespoke Spatial Architecture Portfolio Experience",
+      "Interactive 3D Blueprint & Material Viewer",
+      "Responsive Mobile Touch Exhibit with Gesture Navigation",
+      "Dynamic Project Case Study Publishing Engine",
+    ],
+    technologies: ["Next.js 16", "Three.js", "Lenis Smooth Scroll", "Tailwind CSS", "Framer Motion"],
+    results: [
+      { value: "4.5m", label: "Average Session Duration" },
+      { value: "3", label: "Global Architectural Awards Won" },
+      { value: "0.3s", label: "Instant Full-Bleed Asset Transition" },
+    ],
+    clientQuote: {
+      quote:
+        "Gravity brought the stillness and tactile weight of our physical buildings into the digital realm. The mobile and desktop flow is pure poetry.",
+      author: "Kavita Doshi",
+      role: "Principal Architect, Kala Studio",
+    },
+  },
+
+  // 05. Kosh Wealth
+  {
+    number: "05",
+    slug: "kosh-wealth",
+    title: "Kosh Wealth",
+    client: "Kosh Capital Partners",
+    category: "Fintech Web App",
+    tagline: "Real-time algorithmic portfolio management, tax alpha tracking & wealth dashboard.",
+    description:
+      "A secure, institutional-grade wealthtech platform and responsive client application designed for high-net-worth investors and family offices across India.",
+    year: "2025",
+    location: "Mumbai, India",
+    projectType: "FINTECH WEB APPLICATION",
+    metaString: "FINTECH WEB APP · MUMBAI, INDIA · 2025",
+    liveUrl: "https://koshwealth.io",
+
+    video: {
+      id: "kosh-video-1",
+      type: "video",
+      src: "https://assets.mixkit.co/videos/preview/mixkit-radar-screen-with-moving-scanning-line-41553-large.mp4",
+      poster: "/projects/kosh-poster.jpg",
+      alt: "Kosh Wealth real-time market data visualizer and algorithmic portfolio engine",
+      caption: "ALGORITHMIC ASSET ALLOCATION & RISK RADAR",
+      tag: "VIDEO DEMO",
+    },
+    images: [
+      {
+        id: "kosh-web",
+        type: "image",
+        src: "/projects/kosh-web.jpg",
+        alt: "Kosh Wealth Desktop Website institutional portfolio dashboard",
+        caption: "DESKTOP WEBSITE · INSTITUTIONAL WEALTH CONSOLE",
+        tag: "DESKTOP WEB",
+      },
+      {
+        id: "kosh-app",
+        type: "image",
+        src: "/projects/kosh-app.jpg",
+        alt: "Kosh Wealth Responsive Mobile Application biometric secure asset manager",
+        caption: "RESPONSIVE MOBILE APP · BIOMETRIC WEALTH TRACKER",
+        tag: "RESPONSIVE APP",
+      },
+    ],
+
+    overview:
+      "Kosh Capital manages over ₹12,000 Crores in private assets. They approached Gravity to replace fragmented PDF statements and legacy banking portals with a unified, modern fintech portal and mobile companion app.",
+    challenge:
+      "Wealthy clients expect bank-grade security alongside consumer-grade design elegance. Complex tax harvesting and multi-asset performance charts had to be digestible at a glance.",
+    solution:
+      "We designed an encrypted desktop dashboard and responsive mobile app featuring dark-mode luxury fintech aesthetics, real-time NAV calculation, and instant family-office reporting.",
+    deliverables: [
+      "Institutional Wealth Management Design System",
+      "Desktop Portfolio Analytics & Tax Alpha Suite",
+      "Responsive Client Mobile Application",
+      "SEBI-Compliant Data Security Architecture",
+    ],
+    technologies: ["React 19", "Next.js 16", "Tailwind CSS", "D3.js", "TypeScript", "Node.js"],
+    results: [
+      { value: "₹12K Cr+", label: "Assets Under Monitoring" },
+      { value: "99.99%", label: "Platform Uptime & Compliance SLA" },
+      { value: "4.9/5", label: "Client Satisfaction Rating" },
+    ],
+    clientQuote: {
+      quote:
+        "Our clients now check their portfolios daily because the interface is so transparent, sleek, and reassuring. Gravity delivered an institutional masterpiece.",
+      author: "Vikramaditya Shah",
+      role: "Managing Partner, Kosh Capital",
+    },
+  },
+
+  // 06. Pravaah Logistics
+  {
+    number: "06",
+    slug: "pravaah-logistics",
+    title: "Pravaah Logistics",
+    client: "Pravaah Supply Chain",
+    category: "SaaS Dashboard",
+    tagline: "Autonomous pan-India freight tracking, fleet telemetry & delivery operations software.",
+    description:
+      "A high-density logistics SaaS platform and responsive driver/hub manager coordinating interstate freight, automated route dispatching, and cold-chain temperature telemetry.",
+    year: "2025",
+    location: "Gurugram, India",
+    projectType: "SAAS OPERATIONS PLATFORM",
+    metaString: "SAAS PLATFORM · GURUGRAM, INDIA · 2025",
+    liveUrl: "https://pravaahlogistics.in",
+
+    video: {
+      id: "pravaah-video-1",
+      type: "video",
+      src: "https://assets.mixkit.co/videos/preview/mixkit-drone-flying-over-a-dense-green-forest-41551-large.mp4",
+      poster: "/projects/pravaah-poster.jpg",
+      alt: "Pravaah Logistics pan-India GPS route tracking and multimodal freight dispatch",
+      caption: "REAL-TIME FLEET TELEMETRY & ROUTE OPTIMIZATION",
+      tag: "VIDEO DEMO",
+    },
+    images: [
+      {
+        id: "pravaah-web",
+        type: "image",
+        src: "/projects/pravaah-web.jpg",
+        alt: "Pravaah Logistics Desktop Website fleet dispatcher console and route analytics",
+        caption: "DESKTOP WEBSITE · FLEET DISPATCH CONTROL ROOM",
+        tag: "DESKTOP WEB",
+      },
+      {
+        id: "pravaah-app",
+        type: "image",
+        src: "/projects/pravaah-app.jpg",
+        alt: "Pravaah Logistics Responsive Mobile Application for hub managers and drivers",
+        caption: "RESPONSIVE MOBILE APP · HUB MANIFEST & PROOF OF DELIVERY",
+        tag: "RESPONSIVE APP",
+      },
+    ],
+
+    overview:
+      "Pravaah operates a network of 14,000 trucks connecting key industrial corridors across India. They needed an end-to-end digital overhaul to modernize their control tower and empower on-ground hub managers.",
+    challenge:
+      "Drivers and warehouse staff work on budget smartphones in variable 4G/3G network conditions. The platform needed high information density without sacrificing speed or battery life.",
+    solution:
+      "We created a crisp, high-contrast desktop operations command center paired with an ultra-lightweight responsive web app equipped with barcode scanning and instant offline proof-of-delivery.",
+    deliverables: [
+      "Fleet Operations Control Room Architecture",
+      "Interactive Pan-India Live Tracking Map (Mapbox GL)",
+      "Lightweight Responsive Hub Manager App",
+      "Automated Toll & Fuel Settlement Dashboard",
+    ],
+    technologies: ["Next.js 16", "Mapbox GL", "Tailwind CSS", "WebSockets", "TypeScript"],
+    results: [
+      { value: "14,000+", label: "Active Fleet Vehicles Connected" },
+      { value: "22%", label: "Reduction in Turnaround Time (TAT)" },
+      { value: "0.08s", label: "Instant Telemetry Event Latency" },
+    ],
+    clientQuote: {
+      quote:
+        "From our headquarters in Gurugram to warehouse docks in Kochi, Pravaah's new platform keeps our entire logistics engine running like clockwork.",
+      author: "Harshvardhan Goel",
+      role: "COO & Co-Founder, Pravaah Supply Chain",
+    },
+  },
+
+  // 07. Veda Health
+  {
+    number: "07",
+    slug: "veda-health",
+    title: "Veda Health",
+    client: "Veda Care Systems",
+    category: "HealthTech Web App",
+    tagline: "Preventative diagnostics, telehealth consultations & clinical patient records portal.",
+    description:
+      "An accessible, bilingual healthcare portal and responsive patient management app connecting chronic care patients with certified specialists and diagnostic labs across India.",
+    year: "2026",
+    location: "Hyderabad, India",
+    projectType: "HEALTHTECH WEB APPLICATION",
+    metaString: "HEALTHTECH WEB APP · HYDERABAD, INDIA · 2026",
+    liveUrl: "https://vedahealth.care",
+
+    video: {
+      id: "veda-video-1",
+      type: "video",
+      src: "https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-at-night-41556-large.mp4",
+      poster: "/projects/veda-poster.jpg",
+      alt: "Veda Health patient diagnostics telemetry and telemedicine consultation room",
+      caption: "VIRTUAL TELEHEALTH & CLINICAL DIAGNOSTICS SUITE",
+      tag: "VIDEO DEMO",
+    },
+    images: [
+      {
+        id: "veda-web",
+        type: "image",
+        src: "/projects/veda-web.jpg",
+        alt: "Veda Health Desktop Website patient portal and medical record history",
+        caption: "DESKTOP WEBSITE · CLINICAL TELEHEALTH PORTAL",
+        tag: "DESKTOP WEB",
+      },
+      {
+        id: "veda-app",
+        type: "image",
+        src: "/projects/veda-app.jpg",
+        alt: "Veda Health Responsive Mobile Application vital tracking and prescription delivery",
+        caption: "RESPONSIVE MOBILE APP · VITALS TRACKER & MEDICINE DISPATCH",
+        tag: "RESPONSIVE APP",
+      },
+    ],
+
+    overview:
+      "Veda Health provides preventative medicine and chronic disease management across Tier-1 and Tier-2 Indian cities. They commissioned Gravity to build an intuitive, empathetic patient portal and doctor management web application.",
+    challenge:
+      "Elderly patients often find health apps difficult to navigate. The interface needed large legibility, multilingual voice support, and frictionless appointment booking.",
+    solution:
+      "We designed an accessible, human-centric design system featuring high contrast, clear visual hierarchies, and a responsive mobile web app with instant prescription downloads and integrated video consults.",
+    deliverables: [
+      "Patient-Centered Healthcare Design System (ABHA Compatible)",
+      "Desktop Doctor Consultation & EHR Console",
+      "Responsive Patient Health Management Mobile App",
+      "Secure Video Consultation & Prescription Engine",
+    ],
+    technologies: ["Next.js 16", "WebRTC", "Tailwind CSS", "TypeScript", "Framer Motion"],
+    results: [
+      { value: "350K+", label: "Consultations Completed Post-Launch" },
+      { value: "99/100", label: "Web Accessibility (WCAG 2.1) Score" },
+      { value: "3.4x", label: "Increase in Patient Treatment Adherence" },
+    ],
+    clientQuote: {
+      quote:
+        "Gravity built an experience that our elderly patients find welcoming and our doctors find efficient. It sets a new benchmark for Indian healthtech.",
+      author: "Dr. Ananya Murthy",
+      role: "Chief Medical Officer, Veda Care",
+    },
+  },
+
+  // 08. Drishti AI
+  {
+    number: "08",
+    slug: "drishti-ai",
+    title: "Drishti AI",
+    client: "Drishti Robotics Labs",
+    category: "Spatial AI & 3D",
+    tagline: "Next-generation computer vision inspection & spatial intelligence agency platform.",
+    description:
+      "A cutting-edge spatial 3D inspection platform and responsive field inspector tool using deep-learning vision models to inspect smart infrastructure, manufacturing lines, and defense hardware.",
+    year: "2026",
+    location: "Pune, India",
+    projectType: "SPATIAL 3D & AI WEB PLATFORM",
+    metaString: "SPATIAL AI PLATFORM · PUNE, INDIA · 2026",
+    liveUrl: "https://drishtiai.tech",
+
+    video: {
+      id: "drishti-video-1",
+      type: "video",
+      src: "https://assets.mixkit.co/videos/preview/mixkit-spiral-of-glowing-particles-41550-large.mp4",
+      poster: "/projects/drishti-poster.jpg",
+      alt: "Drishti AI real-time point-cloud anomaly detection and automated 3D spatial scan",
+      caption: "REAL-TIME 3D POINT-CLOUD INSPECTION & DEFECT DETECTION",
+      tag: "VIDEO DEMO",
+    },
+    images: [
+      {
+        id: "drishti-web",
+        type: "image",
+        src: "/projects/drishti-web.jpg",
+        alt: "Drishti AI Desktop Website 3D spatial inspection workbench",
+        caption: "DESKTOP WEBSITE · 3D COMPUTER VISION WORKBENCH",
+        tag: "DESKTOP WEB",
+      },
+      {
+        id: "drishti-app",
+        type: "image",
+        src: "/projects/drishti-app.jpg",
+        alt: "Drishti AI Responsive Mobile Application for factory floor inspectors",
+        caption: "RESPONSIVE MOBILE APP · INDUSTRIAL AR SCANNER",
+        tag: "RESPONSIVE APP",
+      },
+    ],
+
+    overview:
+      "Drishti AI engineers proprietary computer vision algorithms for high-precision manufacturing, defense drones, and railway infrastructure. They needed a global web presence that showcased their mathematical rigour and practical field deployments.",
+    challenge:
+      "Visualizing multi-gigabyte 3D LiDAR point clouds and live video streams in an ordinary browser requires intense GPU optimization without crashing standard enterprise laptops.",
+    solution:
+      "We engineered custom Three.js WebGL shaders and an interactive 3D model viewer on the desktop web platform, backed by a responsive mobile scanner application for on-site engineers.",
+    deliverables: [
+      "Custom 3D WebGL Point-Cloud Inspection Viewer",
+      "Interactive Industrial Case Study Showcase",
+      "Responsive Inspector Tablet/Mobile AR Application",
+      "Enterprise Sales Presentation Kit",
+    ],
+    technologies: ["Three.js", "WebGL Shaders", "Next.js 16", "Tailwind CSS", "TypeScript"],
+    results: [
+      { value: "99.8%", label: "Defect Detection Accuracy in Field Tests" },
+      { value: "60 FPS", label: "Fluid 3D Render Speed on Mobile Devices" },
+      { value: "€4.2M", label: "Enterprise Contracts Secured Post-Launch" },
+    ],
+    clientQuote: {
+      quote:
+        "Gravity brought our complex 3D vision technology to life with jaw-dropping fidelity. It gives our enterprise clients absolute confidence in our engineering.",
+      author: "Nikhil Deshmukh",
+      role: "CEO & Co-Founder, Drishti AI",
+    },
   },
 ];
 

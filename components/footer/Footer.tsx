@@ -90,10 +90,10 @@ export default function Footer() {
               </span>
               <div className="space-y-1.5 flex flex-col items-start">
                 {[
-                  { name: "Hylight", href: "/projects/hylight" },
-                  { name: "Artefact area", href: "/projects/artefact-area" },
-                  { name: "Une Autre Île Productions", href: "/projects/une-autre-ile" },
-                  { name: "BotBlox Systems", href: "/projects/botblox" },
+                  { name: "Sutra CRM", href: "/projects/sutra-crm" },
+                  { name: "Indus Luxe", href: "/projects/indus-luxe" },
+                  { name: "Sarva CMS", href: "/projects/sarva-cms" },
+                  { name: "Kala Studio", href: "/projects/kala-studio" },
                 ].map((proj) => (
                   <Link key={proj.name} href={proj.href} className="block cursor-pointer">
                     <ScrambleText text={proj.name} hoverColor="#ED3327" />

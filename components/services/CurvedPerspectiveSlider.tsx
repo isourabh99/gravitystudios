@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { useSmoothScroll } from "@/components/providers/SmoothScrollProvider";
 import IndustryDetailDrawer, { IndustryDetailData } from "./IndustryDetailDrawer";
 import ScrambleText from "@/components/ui/ScrambleText";
 
@@ -429,29 +430,6 @@ function createCardCanvasTexture(
     ctx.fillText(categoryText, startX + 28, pillY);
     ctx.restore();
 
-    // 3. Top-right CTA: Black Circle with "CLICK" text in capital
-    ctx.save();
-    const btnCx = canvas.width - 58;
-    const btnCy = 56;
-    const btnR = 25;
-
-    ctx.beginPath();
-    ctx.arc(btnCx, btnCy, btnR, 0, Math.PI * 2);
-    ctx.fillStyle = "#000000";
-    ctx.fill();
-
-    ctx.lineWidth = 1.5;
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
-    ctx.stroke();
-
-    // "CLICK" text
-    ctx.font = "900 11px 'Courier New', monospace, sans-serif";
-    ctx.fillStyle = "#FFFFFF";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("CLICK", btnCx, btnCy);
-    ctx.restore();
-
     // 4. Bottom-left Sector Indicator badge [ 01 // TITLE ]
     ctx.save();
     ctx.font = "700 16px 'Courier New', monospace";
@@ -508,61 +486,9 @@ function createCardCanvasTexture(
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   CTA BUTTON TEXTURES GENERATOR (Default Black, Hover White)
-═══════════════════════════════════════════════════════════════════════════ */
-let cachedBtnTextures: { defaultTex: THREE.CanvasTexture; hoverTex: THREE.CanvasTexture } | null = null;
-
-function getBtnTextures() {
-  if (typeof window === "undefined") return null;
-  if (!cachedBtnTextures) {
-    const createTex = (isHover: boolean) => {
-      const size = 128;
-      const c = document.createElement("canvas");
-      c.width = size;
-      c.height = size;
-      const ctx = c.getContext("2d");
-      if (!ctx) return new THREE.CanvasTexture(c);
-
-      const r = size / 2 - 4;
-      const cx = size / 2;
-      const cy = size / 2;
-
-      // Circle
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.fillStyle = isHover ? "#FFFFFF" : "#000000";
-      ctx.fill();
-
-      // Border ring
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = isHover ? "rgba(0, 0, 0, 0.25)" : "rgba(255, 255, 255, 0.45)";
-      ctx.stroke();
-
-      // "CLICK" text in capital
-      ctx.font = "900 24px 'Courier New', monospace, sans-serif";
-      ctx.fillStyle = isHover ? "#000000" : "#FFFFFF";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText("CLICK", cx, cy);
-
-      const tex = new THREE.CanvasTexture(c);
-      tex.colorSpace = THREE.SRGBColorSpace;
-      tex.generateMipmaps = true;
-      return tex;
-    };
-
-    cachedBtnTextures = {
-      defaultTex: createTex(false),
-      hoverTex: createTex(true),
-    };
-  }
-  return cachedBtnTextures;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
    INDIVIDUAL 3D CARD COMPONENT (Edge-to-Edge Curved Screen Alignment)
    - Dynamic Lighting: Center is Bright (uDim = 0), Side wings are Dimmed (uDim = 0.55)
-   - Interactive Top-Right Redirect CTA Button visible on the Center Card
+   - Clean, full photo canvas without clutter
 ═══════════════════════════════════════════════════════════════════════════ */
 interface CardProps {
   item: IndustryDetailData & { uniqueKey: string; globalIndex: number };
@@ -573,14 +499,17 @@ interface CardProps {
   onOpenDrawer: (item: IndustryDetailData) => void;
 }
 
-function SlideCard({ item, texture, trackOffsetRef, hasMovedEnoughForDrag, onCardClick, onOpenDrawer }: CardProps) {
+function SlideCard({
+  item,
+  texture,
+  trackOffsetRef,
+  hasMovedEnoughForDrag,
+  onCardClick,
+  onOpenDrawer,
+}: CardProps) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const btnMeshRef = useRef<THREE.Mesh>(null);
-  const [hovered, setHovered] = useState(false);
-  const [btnHovered, setBtnHovered] = useState(false);
 
   const geometry = useMemo(() => new THREE.PlaneGeometry(CARD_WIDTH, CARD_HEIGHT, 1, 1), []);
-  const btnGeometry = useMemo(() => new THREE.PlaneGeometry(0.38, 0.38), []);
 
   const uniforms = useMemo(
     () => ({
@@ -602,16 +531,6 @@ function SlideCard({ item, texture, trackOffsetRef, hasMovedEnoughForDrag, onCar
       }),
     [uniforms]
   );
-
-  const btnTextures = useMemo(() => getBtnTextures(), []);
-  const btnMaterial = useMemo(() => {
-    return new THREE.MeshBasicMaterial({
-      map: btnTextures?.defaultTex,
-      transparent: true,
-      side: THREE.DoubleSide,
-      depthTest: false,
-    });
-  }, [btnTextures]);
 
   useFrame(() => {
     if (!meshRef.current) return;
@@ -640,22 +559,6 @@ function SlideCard({ item, texture, trackOffsetRef, hasMovedEnoughForDrag, onCar
       dimAmount = Math.min(0.60, Math.pow((distFromCenter - 0.35) / CARD_STRIDE, 0.75) * 0.60);
     }
     uniforms.uDim.value = dimAmount;
-    uniforms.uHover.value = hovered ? 1.0 : 0.0;
-
-    // Top-right CTA Redirect Button is ONLY visible on the center card
-    const isCenter = distFromCenter < 0.45;
-    if (btnMeshRef.current) {
-      btnMeshRef.current.visible = isCenter;
-      if (isCenter) {
-        const targetScale = btnHovered ? 1.15 : 1.0;
-        btnMeshRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, 1.0), 0.2);
-      }
-    }
-
-    if (btnMaterial && btnTextures) {
-      btnMaterial.map = btnHovered ? btnTextures.hoverTex : btnTextures.defaultTex;
-      btnMaterial.needsUpdate = true;
-    }
   });
 
   return (
@@ -663,53 +566,18 @@ function SlideCard({ item, texture, trackOffsetRef, hasMovedEnoughForDrag, onCar
       ref={meshRef}
       geometry={geometry}
       material={material}
-      onPointerOver={(e) => {
-        e.stopPropagation();
-        setHovered(true);
-        const cardU = trackOffsetRef.current + item.globalIndex * CARD_STRIDE;
-        if (Math.abs(cardU) < 0.45 && typeof document !== "undefined") {
-          document.body.style.cursor = "pointer";
-        }
-      }}
-      onPointerOut={() => {
-        setHovered(false);
-        if (typeof document !== "undefined") {
-          document.body.style.cursor = "auto";
-        }
-      }}
       onClick={(e) => {
         e.stopPropagation();
         if (hasMovedEnoughForDrag.current) return;
         const cardU = trackOffsetRef.current + item.globalIndex * CARD_STRIDE;
-        // Clicking active slide opens drawer. Side slides do NOT change slide.
-        if (Math.abs(cardU) < CARD_STRIDE * 0.55) {
+        // ONLY active center slide opens drawer! Side slides do NOT open drawer!
+        if (Math.abs(cardU) < 0.35) {
           onOpenDrawer(item);
+        } else {
+          onCardClick(item.globalIndex);
         }
       }}
-    >
-      {/* Interactive Top-Right Redirect CTA Button on Center Card with "CLICK" */}
-      <mesh
-        ref={btnMeshRef}
-        position={[CARD_WIDTH / 2 - 0.28, CARD_HEIGHT / 2 - 0.28, 0.02]}
-        geometry={btnGeometry}
-        material={btnMaterial}
-        onPointerOver={(e) => {
-          e.stopPropagation();
-          setBtnHovered(true);
-          if (typeof document !== "undefined") document.body.style.cursor = "pointer";
-        }}
-        onPointerOut={(e) => {
-          e.stopPropagation();
-          setBtnHovered(false);
-          if (typeof document !== "undefined") document.body.style.cursor = "auto";
-        }}
-        onClick={(e) => {
-          e.stopPropagation();
-          if (hasMovedEnoughForDrag.current) return;
-          onOpenDrawer(item);
-        }}
-      />
-    </mesh>
+    />
   );
 }
 
@@ -724,6 +592,7 @@ interface SceneProps {
   onActiveIndexChange: (idx: number) => void;
   onCardClick: (index: number) => void;
   onOpenDrawer: (item: IndustryDetailData) => void;
+  onUpdateCardBounds: (bounds: { top: number; bottom: number; left: number; right: number }) => void;
 }
 
 function CarouselScene({
@@ -734,23 +603,40 @@ function CarouselScene({
   onActiveIndexChange,
   onCardClick,
   onOpenDrawer,
+  onUpdateCardBounds,
 }: SceneProps) {
   const { camera, size } = useThree();
   const lastActiveRef = useRef<number>(-1);
 
   // Calibrate camera FOV so all 3 edge-to-edge panels fit cleanly on screen
+  // Calibrate camera FOV so center card is big & prominent on mobile, and 3 panels fit on desktop
   useEffect(() => {
     if (camera instanceof THREE.PerspectiveCamera) {
       const aspect = Math.max(0.1, size.width / size.height);
-      const targetWidth = size.width < 640 ? 10.4 : 9.9;
+      const isMobile = size.width < 640;
+      const isTablet = size.width < 1024;
+      // On mobile, focus on the single active card (4.2 units wide) so it is big and prominent!
+      const targetWidth = isMobile ? 4.1 : isTablet ? 7.2 : 9.9;
       const targetHeight = targetWidth / aspect;
-      const dist = 7.2;
+      const dist = isMobile ? 6.2 : 7.2;
       camera.position.z = dist;
       const fov = 2 * Math.atan((targetHeight / 2) / dist) * (180 / Math.PI);
-      camera.fov = Math.max(26, Math.min(60, fov));
+      camera.fov = Math.max(22, Math.min(60, fov));
       camera.updateProjectionMatrix();
+
+      // Project the center card's top-right corner to get exact pixel bounds
+      const corner = new THREE.Vector3(CARD_WIDTH / 2, CARD_HEIGHT / 2, 0).project(camera);
+      const halfW = corner.x * (size.width / 2);
+      const halfH = corner.y * (size.height / 2);
+
+      onUpdateCardBounds({
+        top: Math.max(0, size.height / 2 - halfH),
+        bottom: Math.min(size.height, size.height / 2 + halfH),
+        left: Math.max(0, size.width / 2 - halfW),
+        right: Math.min(size.width, size.width / 2 + halfW),
+      });
     }
-  }, [size.width, size.height, camera]);
+  }, [size.width, size.height, camera, onUpdateCardBounds]);
 
   useFrame((_, delta) => {
     // Silky-smooth frame-rate independent glide lerp
@@ -822,6 +708,7 @@ export default function CurvedPerspectiveSlider() {
   const dragStartX = useRef<number>(0);
   const dragStartY = useRef<number>(0);
   const dragStartTrackX = useRef<number>(0);
+  const pointerDownTime = useRef<number>(0);
   const hasMovedEnoughForDrag = useRef<boolean>(false);
   const velocityHistory = useRef<Array<{ x: number; time: number }>>([]);
 
@@ -868,6 +755,7 @@ export default function CurvedPerspectiveSlider() {
     dragStartY.current = e.clientY;
     dragStartTrackX.current = trackOffsetRef.current;
     targetTrackOffsetRef.current = trackOffsetRef.current;
+    pointerDownTime.current = performance.now();
     velocityHistory.current = [{ x: e.clientX, time: performance.now() }];
 
     try {
@@ -875,22 +763,105 @@ export default function CurvedPerspectiveSlider() {
     } catch {}
   };
 
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDragging) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const ratio = (e.clientX - rect.left) / rect.width;
-      const onCenter = ratio >= 0.25 && ratio <= 0.75;
-      if (onCenter !== isHoveringCenter) {
-        setIsHoveringCenter(onCenter);
-      }
-      return;
+  const lenis = useSmoothScroll();
+  const carouselContainerRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const mouseTarget = useRef({ x: -100, y: -100 });
+  const mouseCurrent = useRef({ x: -100, y: -100 });
+  const isHoveringCenterRef = useRef(false);
+
+  // Sync ref with state
+  useEffect(() => {
+    isHoveringCenterRef.current = isHoveringCenter;
+  }, [isHoveringCenter]);
+
+  // Pause Lenis background scrolling when Drawer is open, resume when closed
+  useEffect(() => {
+    if (!lenis) return;
+    if (selectedIndustry) {
+      lenis.stop();
+    } else {
+      lenis.start();
     }
+  }, [selectedIndustry, lenis]);
+
+  // Silky buttery smooth lerp animation loop for the custom cursor (Lenis-like damping)
+  useEffect(() => {
+    let animId: number;
+    const lerp = (start: number, end: number, factor: number) => start + (end - start) * factor;
+
+    const tick = () => {
+      if (cursorRef.current && isHoveringCenterRef.current) {
+        // Fast, ultra-responsive smooth follow (0.42 factor removes lag/delay while maintaining polish)
+        mouseCurrent.current.x = lerp(mouseCurrent.current.x, mouseTarget.current.x, 0.42);
+        mouseCurrent.current.y = lerp(mouseCurrent.current.y, mouseTarget.current.y, 0.42);
+
+        cursorRef.current.style.transform = `translate3d(${mouseCurrent.current.x}px, ${mouseCurrent.current.y}px, 0)`;
+      }
+      animId = requestAnimationFrame(tick);
+    };
+
+    animId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animId);
+  }, []);
+
+  const cardBoundsRef = useRef<{ top: number; bottom: number; left: number; right: number }>({
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  });
+
+  const handleUpdateCardBounds = useCallback(
+    (bounds: { top: number; bottom: number; left: number; right: number }) => {
+      cardBoundsRef.current = bounds;
+    },
+    []
+  );
+
+  const handlePointerLeave = () => {
+    if (isHoveringCenterRef.current) {
+      isHoveringCenterRef.current = false;
+      setIsHoveringCenter(false);
+    }
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const relX = e.clientX - rect.left;
+    const relY = e.clientY - rect.top;
+
+    const b = cardBoundsRef.current;
+    // Strict active center card bounds: strictly active center slide ONLY, NEVER on left or right images!
+    const insideCard =
+      b.bottom > 0 &&
+      relX >= b.left + 4 &&
+      relX <= b.right - 4 &&
+      relY >= b.top + 2 &&
+      relY <= b.bottom - 2;
+
+    if (insideCard && !isDragging) {
+      mouseTarget.current = { x: relX, y: relY };
+      if (!isHoveringCenterRef.current) {
+        isHoveringCenterRef.current = true;
+        mouseCurrent.current = { x: relX, y: relY };
+        setIsHoveringCenter(true);
+      }
+    } else {
+      if (isHoveringCenterRef.current) {
+        isHoveringCenterRef.current = false;
+        setIsHoveringCenter(false);
+      }
+    }
+
+    if (!isDragging) return;
 
     const now = performance.now();
     const deltaPx = e.clientX - dragStartX.current;
     const totalDist = Math.hypot(e.clientX - dragStartX.current, e.clientY - dragStartY.current);
 
-    if (totalDist > 5) {
+    // Standard touch tap threshold (14px) so minor finger wiggles on mobile are not marked as drags
+    if (totalDist > 14) {
       hasMovedEnoughForDrag.current = true;
     }
 
@@ -915,7 +886,11 @@ export default function CurvedPerspectiveSlider() {
     } catch {}
 
     const totalDist = Math.hypot(e.clientX - dragStartX.current, e.clientY - dragStartY.current);
-    const wasDrag = hasMovedEnoughForDrag.current || totalDist > 5;
+    const duration = performance.now() - pointerDownTime.current;
+
+    // A tap is defined as short duration (< 350ms) and low movement (< 15px)
+    const isCleanTap = duration < 350 && totalDist < 15;
+    const wasDrag = !isCleanTap && (hasMovedEnoughForDrag.current || totalDist >= 15);
 
     // IF DRAG / GLIDE: execute slide momentum glide and NEVER open drawer!
     if (wasDrag) {
@@ -963,10 +938,25 @@ export default function CurvedPerspectiveSlider() {
     // IF CLEAN TAP / CLICK (no drag): open detail drawer on active center card
     const rect = e.currentTarget.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
-    const ratio = clickX / rect.width;
+    const clickY = e.clientY - rect.top;
 
-    if (ratio >= 0.25 && ratio <= 0.75) {
-      setSelectedIndustry(activeIndustry);
+    const b = cardBoundsRef.current;
+    const w = rect.width;
+    const h = rect.height;
+    const isMobile = w < 640;
+
+    // On mobile, any tap across the card (5% to 95% of container width) directly opens active slide drawer
+    const isInsideCenterCard = isMobile
+      ? clickX >= w * 0.05 && clickX <= w * 0.95 && clickY >= 0 && clickY <= h
+      : b.bottom > 0
+        ? clickX >= b.left - 24 &&
+          clickX <= b.right + 24 &&
+          clickY >= b.top - 24 &&
+          clickY <= b.bottom + 24
+        : clickX >= w * 0.15 && clickX <= w * 0.85 && clickY >= h * 0.05 && clickY <= h * 0.95;
+
+    if (isInsideCenterCard) {
+      openActiveIndustryDrawer();
     }
   };
 
@@ -977,12 +967,44 @@ export default function CurvedPerspectiveSlider() {
     if (diff === 0) {
       // Active center card clicked - open detail drawer
       const baseIndex = ((globalIndex % BASE_INDUSTRIES.length) + BASE_INDUSTRIES.length) % BASE_INDUSTRIES.length;
-      setSelectedIndustry(BASE_INDUSTRIES[baseIndex]);
+      openActiveIndustryDrawer(BASE_INDUSTRIES[baseIndex]);
     }
     // Side card clicked - DO NOT change slide on click!
   };
 
   const activeIndustry = BASE_INDUSTRIES[activeDotIndex] || BASE_INDUSTRIES[0];
+
+  const lastOpenTimeRef = useRef<number>(0);
+  const openActiveIndustryDrawer = (itemToOpen?: IndustryDetailData) => {
+    const now = performance.now();
+    if (now - lastOpenTimeRef.current < 500) return;
+    lastOpenTimeRef.current = now;
+    setSelectedIndustry(itemToOpen || activeIndustry);
+  };
+
+  const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (hasMovedEnoughForDrag.current) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+    const w = rect.width;
+    const h = rect.height;
+    const isMobile = w < 640;
+    const b = cardBoundsRef.current;
+
+    const isInside = isMobile
+      ? clickX >= w * 0.05 && clickX <= w * 0.95 && clickY >= 0 && clickY <= h
+      : b.bottom > 0
+        ? clickX >= b.left - 24 &&
+          clickX <= b.right + 24 &&
+          clickY >= b.top - 24 &&
+          clickY <= b.bottom + 24
+        : clickX >= w * 0.15 && clickX <= w * 0.85;
+
+    if (isInside) {
+      openActiveIndustryDrawer();
+    }
+  };
 
   return (
     <section id="industries" className="relative w-full bg-[#F4F4F0] select-none overflow-hidden">
@@ -990,17 +1012,17 @@ export default function CurvedPerspectiveSlider() {
           1. SECTION TITLE: "Industries We Address"
           Directly after Our Services, perfectly aligned with Navbar (max-w-8xl mx-auto px-6 sm:px-12)
          ========================================================================= */}
-      <div className="w-full max-w-8xl mx-auto px-6 sm:px-12 pt-16 sm:pt-24 pb-8 sm:pb-12">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-neutral-300">
+      <div className="w-full max-w-8xl mx-auto px-6 sm:px-12 pt-6 sm:pt-16 lg:pt-24 pb-3 sm:pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 pb-4 sm:pb-6 border-b border-neutral-300">
           <div>
-            <span className="font-mono text-xs sm:text-[13px] tracking-[0.25em] text-[#ED3327] uppercase font-semibold block mb-3">
+            <span className="font-mono text-xs sm:text-[13px] tracking-[0.25em] text-[#ED3327] uppercase font-semibold block mb-2 sm:mb-3">
               [ SECTORS & DOMAINS ]
             </span>
-            <h2 className="font-mg12-regular text-4xl sm:text-5xl lg:text-6xl text-neutral-900 tracking-tight leading-none">
+            <h2 className="font-mg12-regular text-3xl sm:text-5xl lg:text-6xl text-neutral-900 tracking-tight leading-none">
               Industries We Address
             </h2>
           </div>
-          <p className="font-mg12-regular text-sm sm:text-base text-neutral-600 font-light leading-relaxed max-w-md">
+          <p className="font-mg12-regular text-xs sm:text-base text-neutral-600 font-light leading-relaxed max-w-md">
             Every tech sector convinces a different way. We shape each digital experience around what your field needs to prove.
           </p>
         </div>
@@ -1012,20 +1034,54 @@ export default function CurvedPerspectiveSlider() {
           - Left & Right cards have dark cinema overlay for depth
           - Top-right CTA redirect button on the Center Card opens the Detail Drawer
          ========================================================================= */}
-      <div className="w-full max-w-8xl mx-auto px-6 sm:px-12">
+      <div className="w-full max-w-8xl mx-auto px-4 sm:px-12">
         <div
+          ref={carouselContainerRef}
           tabIndex={0}
           role="region"
           aria-roledescription="carousel"
           aria-label="Industries Carousel"
+          onClick={handleContainerClick}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
-          className={`relative w-full h-[440px] sm:h-[500px] md:h-[540px] overflow-hidden outline-hidden touch-pan-y ${
-            isDragging ? "cursor-grabbing" : isHoveringCenter ? "cursor-pointer" : "cursor-grab"
+          onPointerLeave={handlePointerLeave}
+          className={`relative w-full h-[300px] xs:h-[340px] sm:h-[420px] md:h-[500px] lg:h-[540px] overflow-hidden outline-hidden touch-pan-y ${
+            isDragging ? "cursor-grabbing" : isHoveringCenter ? "cursor-none" : "cursor-grab"
           }`}
         >
+          {/* Custom Inverted Floating Cursor - STRICTLY on Active Slide */}
+          <div
+            ref={cursorRef}
+            className={`pointer-events-none absolute top-0 left-0 z-40 transition-opacity duration-200 ease-out select-none ${
+              isHoveringCenter && !isDragging ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"
+            }`}
+            style={{
+              mixBlendMode: "difference",
+              transform: "translate3d(-100px, -100px, 0)",
+              willChange: "transform",
+              pointerEvents: "none",
+            }}
+          >
+            <div className="flex items-center gap-2.5 -translate-x-3.5 -translate-y-1/2 pointer-events-none" style={{ pointerEvents: "none" }}>
+              {/* Dot inside Circle cursor */}
+              <div className="relative w-7 h-7 rounded-full border border-white flex items-center justify-center shrink-0 pointer-events-none" style={{ pointerEvents: "none" }}>
+                <span className="w-1.5 h-1.5 rounded-full bg-white block pointer-events-none" style={{ pointerEvents: "none" }} />
+              </div>
+
+              {/* Floating Screenshot-style badge: [ READ ARTICLE ] [ ↗ ] */}
+              <div className="flex items-center gap-1 shrink-0 pointer-events-none" style={{ pointerEvents: "none" }}>
+                <span className="bg-white text-black font-mono text-[10px] sm:text-[11px] font-bold tracking-widest px-2.5 py-1 rounded-[2px] uppercase whitespace-nowrap shadow-sm pointer-events-none" style={{ pointerEvents: "none" }}>
+                  READ ARTICLE
+                </span>
+                <span className="bg-white text-black font-mono text-xs font-bold w-5.5 h-5.5 sm:w-6 sm:h-6 flex items-center justify-center rounded-[2px] whitespace-nowrap shadow-sm pointer-events-none" style={{ pointerEvents: "none" }}>
+                  ↗
+                </span>
+              </div>
+            </div>
+          </div>
+
           {/* WebGL Canvas */}
           <div className="absolute inset-0 w-full h-full">
             {mounted ? (
@@ -1048,6 +1104,7 @@ export default function CurvedPerspectiveSlider() {
                   onActiveIndexChange={setActiveDotIndex}
                   onCardClick={handleCardClick}
                   onOpenDrawer={(item) => setSelectedIndustry(item)}
+                  onUpdateCardBounds={handleUpdateCardBounds}
                 />
               </Canvas>
             ) : (
@@ -1072,8 +1129,8 @@ export default function CurvedPerspectiveSlider() {
           3. ACTIVE INDUSTRY TITLE & DESCRIPTION WITH REDIRECT ICON
           Aligns strictly with Navbar and Footer: max-w-8xl mx-auto px-6 sm:px-12
          ========================================================================= */}
-      <div className="w-full max-w-8xl mx-auto px-6 sm:px-12 pt-8 sm:pt-10 pb-16 sm:pb-24">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-neutral-300">
+      <div className="w-full max-w-8xl mx-auto px-6 sm:px-12 pt-4 sm:pt-8 pb-8 sm:pb-16 lg:pb-24">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 pb-4 sm:pb-6 border-b border-neutral-300">
           {/* Active Industry Title & Description */}
           <div className="space-y-3 max-w-5xl lg:max-w-6xl w-full">
             <div className="flex items-center gap-2.5">
@@ -1081,7 +1138,7 @@ export default function CurvedPerspectiveSlider() {
                 {activeIndustry.num} / 06
               </span>
               <span className="font-mono text-xs text-neutral-400 uppercase tracking-widest">
-                // {activeIndustry.category}
+                {"//"} {activeIndustry.category}
               </span>
             </div>
 
