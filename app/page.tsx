@@ -7,7 +7,7 @@ import Footer from "@/components/footer/Footer";
 
 export default function SinglePageHome() {
   return (
-    <div className="min-h-screen bg-black text-neutral-100 flex flex-col relative overflow-hidden font-sans selection:bg-white selection:text-black scroll-smooth">
+    <div className="min-h-screen bg-black text-neutral-100 flex flex-col relative overflow-x-clip font-sans selection:bg-white selection:text-black scroll-smooth">
       <Navbar />
       <Hero />
       <ClientsSection />

@@ -1,20 +1,22 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion, useScroll, useTransform } from "framer-motion";
 import CopyrightBar from "@/components/ui/CopyrightBar";
+import ScrambleText from "@/components/ui/ScrambleText";
 
 const Robot3DCanvas = dynamic(() => import("@/components/hero/Robot3DCanvas"), {
   ssr: false,
 });
 
 const HERO_TEXT = "We build premium web experiences for the world's most ambitious tech companies.";
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#@$%&*+=/<>[]";
+const HERO_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#@$%&*+=/<>[]";
 
 export default function Hero() {
   const { scrollY } = useScroll();
-  const textRef = useRef<HTMLHeadingElement>(null);
+  const [scrambleTrigger, setScrambleTrigger] = useState(false);
+  const triggeredRef = useRef(false);
 
   // Text translation & fade out on scroll
   const titleY = useTransform(scrollY, [0, 250], [0, -60]);
@@ -25,51 +27,23 @@ export default function Hero() {
   const metaY = useTransform(scrollY, [0, 80], [0, 15]);
   const pointerEvents = useTransform(scrollY, (y) => (y > 60 ? "none" : "auto"));
 
-  // Scroll-driven Scramble & Reverse Unscramble (RAF throttled for smooth scrolling)
+  // Trigger scramble animation once as soon as user starts scrolling down
+  // Animation plays to 100% completion on its own without getting stuck
   useEffect(() => {
-    let isClean = true;
-    let rafId: number | null = null;
-    const len = HERO_TEXT.length;
-
     const unsubscribe = scrollY.on("change", (y) => {
-      if (rafId !== null) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        if (y <= 2) {
-          if (!isClean && textRef.current) {
-            textRef.current.textContent = HERO_TEXT;
-            isClean = true;
-          }
-        } else if (y <= 230) {
-          isClean = false;
-          if (textRef.current) {
-            const progress = Math.min(1, Math.max(0, y / 200));
-            const scrambleCount = Math.floor(progress * len);
-
-            let out = "";
-            for (let i = 0; i < len; i++) {
-              const ch = HERO_TEXT[i];
-              if (ch === " " || ch === "'") {
-                out += ch;
-              } else if (i < scrambleCount) {
-                out += CHARS[Math.floor(Math.random() * CHARS.length)];
-              } else {
-                out += ch;
-              }
-            }
-            textRef.current.textContent = out;
-          }
-        }
-      });
+      if (y > 6 && !triggeredRef.current) {
+        triggeredRef.current = true;
+        setScrambleTrigger(true);
+      }
     });
 
     return () => {
-      if (rafId !== null) cancelAnimationFrame(rafId);
       unsubscribe();
     };
   }, [scrollY]);
 
   return (
-    <section data-theme="dark" className="relative w-full h-[100dvh] sm:min-h-[700px] bg-black text-neutral-100 flex flex-col justify-between px-5 sm:px-12 pt-20 sm:pt-28 pb-5 sm:pb-8 select-none overflow-hidden">
+    <section data-theme="dark" className="relative w-full h-[100dvh] sm:min-h-[700px] bg-black text-neutral-100 flex flex-col justify-between px-6 sm:px-12 pt-20 sm:pt-28 pb-5 sm:pb-8 select-none overflow-hidden">
       {/* Light Ambient Red Atmosphere behind Robot (GPU composited) */}
       <div className="absolute right-0 top-1/4 bottom-0 w-full sm:w-[65%] pointer-events-none z-0 overflow-hidden opacity-80 transform-gpu">
         <div className="absolute -right-20 top-10 w-[600px] h-[600px] rounded-full bg-red-700/15 blur-[120px] transform-gpu" />
@@ -81,14 +55,19 @@ export default function Hero() {
 
       {/* Main Content Overlay Container */}
       <div className="max-w-8xl mx-auto w-full flex-1 flex flex-col justify-between relative z-20 pointer-events-none">
-        {/* Hero Title Typography (Smaller, Regular Weight) */}
-        <div className="flex-1 flex items-start sm:items-center max-w-2xl lg:max-w-3xl pt-6 sm:pt-0 sm:my-auto">
+        {/* Hero Title Typography & CTAs */}
+        <div className="flex-1 flex flex-col items-start justify-start sm:justify-center max-w-2xl lg:max-w-3xl pt-6 sm:pt-0 sm:my-auto pointer-events-auto">
           <motion.h1
-            ref={textRef}
             style={{ y: titleY, opacity: titleOpacity }}
-            className="font-mg12-regular text-xl sm:text-3xl lg:text-4xl xl:text-5xl font-normal tracking-tight text-white leading-[1.25] pointer-events-auto"
+            className="font-mg12-regular text-xl sm:text-3xl lg:text-4xl xl:text-5xl font-normal tracking-tight text-white leading-[1.25]"
           >
-            We build premium web experiences for the world&apos;s most ambitious tech companies.
+            <ScrambleText
+              text={HERO_TEXT}
+              trigger={scrambleTrigger}
+              interactive={false}
+              speed={1.25}
+              chars={HERO_CHARS}
+            />
           </motion.h1>
         </div>
 

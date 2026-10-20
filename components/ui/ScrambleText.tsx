@@ -1,8 +1,15 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+export const DEFAULT_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 export interface ScrambleTextProps {
   text: string;
@@ -11,23 +18,38 @@ export interface ScrambleTextProps {
   autoPlay?: boolean;
   interactive?: boolean;
   speed?: number;
+  chars?: string;
+  trigger?: boolean;
+  as?: React.ElementType;
   onComplete?: () => void;
 }
 
-export default function ScrambleText({
-  text = "",
-  className = "",
-  hoverColor = "#ED3327",
-  autoPlay = false,
-  interactive = true,
-  speed = 0.5,
-  onComplete,
-}: ScrambleTextProps) {
+export interface ScrambleTextRef {
+  startScramble: () => void;
+  stopScramble: () => void;
+}
+
+const ScrambleText = forwardRef<ScrambleTextRef, ScrambleTextProps>(function ScrambleText(
+  {
+    text = "",
+    className = "",
+    hoverColor = "#ED3327",
+    autoPlay = false,
+    interactive = true,
+    speed = 0.5,
+    chars,
+    trigger = false,
+    as = "span",
+    onComplete,
+  },
+  ref
+) {
   const safeText = text || "";
   const [displayText, setDisplayText] = useState(autoPlay ? "" : safeText);
   const [isHovered, setIsHovered] = useState(false);
   const frameRef = useRef<number | null>(null);
   const onCompleteRef = useRef(onComplete);
+  const prevTriggerRef = useRef(false);
 
   useEffect(() => {
     onCompleteRef.current = onComplete;
@@ -41,6 +63,7 @@ export default function ScrambleText({
     if (hoverColor && interactive) setIsHovered(true);
     let iteration = 0;
     const maxIterations = safeText.length;
+    const charPool = chars || DEFAULT_CHARS;
 
     if (frameRef.current) cancelAnimationFrame(frameRef.current);
 
@@ -49,13 +72,26 @@ export default function ScrambleText({
         safeText
           .split("")
           .map((char, index) => {
-            if (char === " " || char === ":" || char === "+" || char === "@" || char === "." || char === "—" || char === ",") {
+            if (
+              char === " " ||
+              char === ":" ||
+              char === "+" ||
+              char === "@" ||
+              char === "." ||
+              char === "—" ||
+              char === "," ||
+              char === "'" ||
+              char === "’" ||
+              char === '"' ||
+              char === "`" ||
+              char === "-"
+            ) {
               return char;
             }
             if (index < iteration) {
               return safeText[index];
             }
-            return CHARS[Math.floor(Math.random() * CHARS.length)];
+            return charPool[Math.floor(Math.random() * charPool.length)];
           })
           .join("")
       );
@@ -70,7 +106,7 @@ export default function ScrambleText({
     };
 
     frameRef.current = requestAnimationFrame(step);
-  }, [safeText, hoverColor, interactive, speed]);
+  }, [safeText, hoverColor, interactive, speed, chars]);
 
   const stopScramble = useCallback(() => {
     if (interactive) {
@@ -80,10 +116,27 @@ export default function ScrambleText({
     }
   }, [interactive, safeText]);
 
+  useImperativeHandle(
+    ref,
+    () => ({
+      startScramble,
+      stopScramble,
+    }),
+    [startScramble, stopScramble]
+  );
+
+  // Trigger scramble when trigger prop transitions to true
+  useEffect(() => {
+    if (trigger && !prevTriggerRef.current) {
+      startScramble();
+    }
+    prevTriggerRef.current = !!trigger;
+  }, [trigger, startScramble]);
+
   useEffect(() => {
     if (autoPlay) {
       startScramble();
-    } else {
+    } else if (!trigger) {
       setDisplayText(safeText);
     }
     return () => {
@@ -93,18 +146,25 @@ export default function ScrambleText({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoPlay, safeText]);
 
+  const displayClass =
+    className.includes("block") || className.includes("inline") ? "" : "inline-block";
+
+  const Component = (as || "span") as any;
+
   return (
-    <span
+    <Component
       onMouseEnter={interactive ? startScramble : undefined}
       onMouseLeave={interactive ? stopScramble : undefined}
-      className={`inline-block transition-colors duration-200 select-none ${
+      className={`transition-colors duration-200 select-none ${
         interactive ? "cursor-pointer" : ""
-      } ${className}`}
+      } ${displayClass} ${className}`.trim()}
       style={{
         color: isHovered && interactive ? hoverColor : undefined,
       }}
     >
       {displayText}
-    </span>
+    </Component>
   );
-}
+});
+
+export default ScrambleText;

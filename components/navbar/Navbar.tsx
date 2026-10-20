@@ -197,7 +197,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
-            className={`group p-2 flex flex-col items-end justify-center gap-1.5 cursor-pointer focus:outline-none transition-colors duration-300 pointer-events-auto ${isDarkBg ? "text-white" : "text-black"
+            className={`group p-2 -mr-2 flex flex-col items-end justify-center gap-1.5 cursor-pointer focus:outline-none transition-colors duration-300 pointer-events-auto ${isDarkBg ? "text-white" : "text-black"
               }`}
             aria-label="Open Navigation Menu"
           >
@@ -228,11 +228,11 @@ export default function Navbar() {
 
             {/* Popup Menu */}
             <motion.aside
-              initial={{ opacity: 0, scale: 0.15, transformOrigin: "top right", borderRadius: "32px" }}
-              animate={{ opacity: 1, scale: 1, transformOrigin: "top right", borderRadius: "24px" }}
-              exit={{ opacity: 0, scale: 0.15, transformOrigin: "top right", borderRadius: "32px" }}
+              initial={{ opacity: 0, scale: 0.15, transformOrigin: "top right" }}
+              animate={{ opacity: 1, scale: 1, transformOrigin: "top right" }}
+              exit={{ opacity: 0, scale: 0.15, transformOrigin: "top right" }}
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed top-3 right-3 sm:top-5 sm:right-5 md:top-6 md:right-6 z-[100] w-[calc(100vw-1.5rem)] sm:w-[540px] md:w-[600px] lg:w-[620px] max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-2.5rem)] md:max-h-[calc(100vh-3rem)] h-fit bg-[#EFEFEF] text-neutral-900 p-6 sm:p-8 md:p-9 flex flex-col justify-between overflow-hidden select-none shadow-2xl border border-neutral-300"
+              className="fixed top-3 right-3 sm:top-5 sm:right-5 md:top-6 md:right-6 z-[100] w-[calc(100vw-1.5rem)] sm:w-[540px] md:w-[600px] lg:w-[620px] max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-2.5rem)] md:max-h-[calc(100vh-3rem)] h-fit bg-[#EFEFEF] text-neutral-900 p-6 sm:p-8 md:p-9 flex flex-col justify-between overflow-hidden select-none shadow-2xl border border-neutral-300 rounded-none"
             >
               {/* Popup Top Header */}
               <div className="flex items-center justify-between pb-3 sm:pb-4">
@@ -290,14 +290,19 @@ export default function Navbar() {
                     </span>
                     <div className="space-y-1.5 text-neutral-900 font-mg12-regular text-sm sm:text-[15px] flex flex-col items-start">
                       {[
-                        "Sutra CRM [Enterprise CRM]",
-                        "Indus Luxe [E-Commerce]",
-                        "Sarva CMS [Headless CMS]",
-                        "Kala Studio [Portfolio]",
+                        { name: "Sutra CRM", href: "/projects" },
+                        { name: "Indus Luxe", href: "/projects" },
+                        { name: "Sarva CMS", href: "/projects" },
+                        { name: "Kala Studio", href: "/projects" },
                       ].map((proj) => (
-                        <span key={proj} className="block cursor-pointer">
-                          <ScrambleText text={proj} hoverColor="#ED3327" />
-                        </span>
+                        <Link
+                          key={proj.name}
+                          href={proj.href}
+                          onClick={() => setMenuOpen(false)}
+                          className="block cursor-pointer"
+                        >
+                          <ScrambleText text={proj.name} hoverColor="#ED3327" />
+                        </Link>
                       ))}
                     </div>
                   </div>
