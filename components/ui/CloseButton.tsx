@@ -21,8 +21,8 @@ export default function CloseButton({
     <button
       type="button"
       onClick={onClick}
-      className={`group relative w-11 h-11 sm:w-12 sm:h-12 rounded-none flex items-center justify-center overflow-hidden cursor-pointer focus:outline-none transition-colors duration-200 select-none ${
-        isDark ? "bg-black border border-neutral-800" : "bg-white shadow-none"
+      className={`group relative w-11 h-11 sm:w-12 sm:h-12 rounded-none flex items-center justify-center overflow-hidden cursor-pointer focus:outline-none transition-colors duration-200 select-none border-none ${
+        isDark ? "bg-black" : "bg-white shadow-none"
       } ${className}`}
       aria-label={ariaLabel}
     >
