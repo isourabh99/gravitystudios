@@ -5,40 +5,62 @@ import { usePathname } from "next/navigation";
 import UniversalLoader from "@/components/loader/UniversalLoader";
 import { useSmoothScroll } from "@/components/providers/SmoothScrollProvider";
 
-export const UniversalLoaderContext = createContext<{ isLoading: boolean }>({ isLoading: true });
+export const UniversalLoaderContext = createContext<{ isLoading: boolean }>({ isLoading: false });
 
 export function useUniversalLoader() {
   return useContext(UniversalLoaderContext);
 }
 
+/**
+ * UniversalLoaderWrapper:
+ * - CMS (/admin/*): Loader is NEVER shown. Dedicated skeletons are used instead.
+ * - Main Website: Studio loader runs ONLY on page route changes/transitions.
+ */
 export default function UniversalLoaderWrapper({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const lenis = useSmoothScroll();
-  const isFirstMount = useRef(true);
+  const isAdmin = pathname.startsWith("/admin");
 
-  // Trigger loader on mount and route changes
+  const [loading, setLoading] = useState(false);
+  const prevPathname = useRef<string | null>(null);
+
   useEffect(() => {
-    window.scrollTo(0, 0);
-    if (lenis) {
-      lenis.scrollTo(0, { immediate: true });
-    }
-
-    if (isFirstMount.current) {
-      isFirstMount.current = false;
-      setLoading(true);
+    // 1. Strict CMS Rule: NEVER show website loader in admin
+    if (isAdmin) {
+      setLoading(false);
+      prevPathname.current = pathname;
       return;
     }
 
-    // Client-side route changes
-    setLoading(true);
-  }, [pathname, lenis]);
+    // 2. Initial visit on website: Skeletons & direct view, no full-screen blocker
+    if (prevPathname.current === null) {
+      prevPathname.current = pathname;
+      setLoading(false);
+      return;
+    }
 
+    // 3. Page changes on main website: Trigger transition loader
+    if (prevPathname.current !== pathname) {
+      prevPathname.current = pathname;
+      window.scrollTo(0, 0);
+      if (lenis) {
+        lenis.scrollTo(0, { immediate: true });
+      }
+      setLoading(true);
+    }
+  }, [pathname, lenis, isAdmin]);
+
+  // Manage body scroll locking only during active page transition loader
   useEffect(() => {
+    if (isAdmin) {
+      document.body.style.overflow = "";
+      return;
+    }
+
     if (loading) {
       document.body.style.overflow = "hidden";
       if (lenis) lenis.stop();
@@ -50,11 +72,11 @@ export default function UniversalLoaderWrapper({
       }
       window.scrollTo(0, 0);
     }
-  }, [loading, lenis]);
+  }, [loading, lenis, isAdmin]);
 
   return (
     <UniversalLoaderContext.Provider value={{ isLoading: loading }}>
-      {loading && (
+      {!isAdmin && loading && (
         <UniversalLoader
           key={pathname}
           pathname={pathname}

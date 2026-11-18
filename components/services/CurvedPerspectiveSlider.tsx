@@ -1034,7 +1034,7 @@ export default function CurvedPerspectiveSlider() {
           - Left & Right cards have dark cinema overlay for depth
           - Top-right CTA redirect button on the Center Card opens the Detail Drawer
          ========================================================================= */}
-      <div className="w-full max-w-8xl mx-auto px-4 sm:px-12">
+      <div className="w-full max-w-8xl mx-auto px-6 sm:px-12">
         <div
           ref={carouselContainerRef}
           tabIndex={0}

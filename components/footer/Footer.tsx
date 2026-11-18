@@ -76,6 +76,7 @@ export default function Footer() {
                   { name: "Our services", href: "/services" },
                   { name: "News", href: "/#news" },
                   { name: "Contact", href: "/contact" },
+                  { name: "Studio Admin", href: "/admin" },
                 ].map((item) => (
                   <Link key={item.name} href={item.href} className="block">
                     <ScrambleText text={item.name} hoverColor="#ED3327" />

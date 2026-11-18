@@ -107,3 +107,18 @@ html.lenis body {
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;
 }
+
+/* Modern Skeleton Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite linear;
+}

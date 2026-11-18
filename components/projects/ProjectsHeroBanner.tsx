@@ -108,12 +108,15 @@ function ScrambleReveal({
 export interface ProjectsHeroBannerProps {
   onSelectProject?: (project: Project) => void;
   onExploreClick?: () => void;
+  projects?: Project[];
 }
 
 export default function ProjectsHeroBanner({
   onSelectProject,
   onExploreClick,
+  projects = PROJECTS,
 }: ProjectsHeroBannerProps) {
+  const projectsList = projects && projects.length > 0 ? projects : PROJECTS;
   const { isLoading } = useUniversalLoader();
   const isReady = !isLoading;
 
@@ -122,10 +125,10 @@ export default function ProjectsHeroBanner({
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % PROJECTS.length);
+      setActiveIndex((prev) => (prev + 1) % projectsList.length);
     }, 3200);
     return () => clearInterval(timer);
-  }, []);
+  }, [projectsList.length]);
 
   // Touch / Drag handling for 3D wave track
   const touchStartX = useRef(0);
@@ -144,15 +147,15 @@ export default function ProjectsHeroBanner({
     if (Math.abs(touchDeltaX.current) > 40) {
       if (touchDeltaX.current > 0) {
         // swipe right -> previous slide
-        setActiveIndex((prev) => (prev - 1 + PROJECTS.length) % PROJECTS.length);
+        setActiveIndex((prev) => (prev - 1 + projectsList.length) % projectsList.length);
       } else {
         // swipe left -> next slide
-        setActiveIndex((prev) => (prev + 1) % PROJECTS.length);
+        setActiveIndex((prev) => (prev + 1) % projectsList.length);
       }
     }
   };
 
-  const activeProject = PROJECTS[activeIndex] || PROJECTS[0];
+  const activeProject = projectsList[activeIndex] || projectsList[0];
 
   return (
     <div className="relative w-full h-screen min-h-[680px] max-h-[1050px] bg-[#030303] text-white flex flex-col justify-between select-none overflow-hidden">
@@ -261,9 +264,9 @@ export default function ProjectsHeroBanner({
           className="relative w-full h-[220px] xs:h-[240px] sm:h-[290px] md:h-[320px] lg:h-[350px] flex items-center justify-center"
           style={{ perspective: "1200px" }}
         >
-          {PROJECTS.map((project, idx) => {
+          {projectsList.map((project, idx) => {
             // Distance from active center slide (-3 to 3)
-            const count = PROJECTS.length;
+            const count = projectsList.length;
             let offset = (idx - activeIndex) % count;
             if (offset > count / 2) offset -= count;
             if (offset < -count / 2) offset += count;
@@ -366,7 +369,7 @@ export default function ProjectsHeroBanner({
           <div className="flex items-center gap-2">
             <span className="text-white font-bold">{activeProject.number}</span>
             <span>/</span>
-            <span>{String(PROJECTS.length).padStart(2, "0")}</span>
+            <span>{String(projectsList.length).padStart(2, "0")}</span>
             <span className="hidden sm:inline text-neutral-400 ml-2 uppercase tracking-wider">
               {activeProject.title} — {activeProject.category}
             </span>
@@ -377,7 +380,7 @@ export default function ProjectsHeroBanner({
             <button
               type="button"
               onClick={() =>
-                setActiveIndex((prev) => (prev - 1 + PROJECTS.length) % PROJECTS.length)
+                setActiveIndex((prev) => (prev - 1 + projectsList.length) % projectsList.length)
               }
               aria-label="Previous Project"
               className="w-8 h-8 rounded-full border border-neutral-700 bg-black/60 hover:bg-white hover:text-black hover:border-white text-white flex items-center justify-center text-xs transition-colors cursor-pointer"
@@ -386,7 +389,7 @@ export default function ProjectsHeroBanner({
             </button>
             <button
               type="button"
-              onClick={() => setActiveIndex((prev) => (prev + 1) % PROJECTS.length)}
+              onClick={() => setActiveIndex((prev) => (prev + 1) % projectsList.length)}
               aria-label="Next Project"
               className="w-8 h-8 rounded-full border border-neutral-700 bg-black/60 hover:bg-white hover:text-black hover:border-white text-white flex items-center justify-center text-xs transition-colors cursor-pointer"
             >

@@ -14,6 +14,7 @@ export interface CustomInputFieldProps {
   multiline?: boolean;
   rows?: number;
   className?: string;
+  isDark?: boolean;
 }
 
 export default function CustomInputField({
@@ -28,18 +29,25 @@ export default function CustomInputField({
   multiline = false,
   rows = 6,
   className = "",
+  isDark = false,
 }: CustomInputFieldProps) {
+  const labelColor = isDark ? "text-neutral-300" : "text-neutral-800";
+  const optionalColor = isDark ? "text-neutral-500" : "text-neutral-400";
+  const fieldBase = isDark
+    ? "bg-[#0D0D10] border-neutral-800 text-neutral-100 placeholder:text-neutral-600 focus:border-neutral-500"
+    : "bg-white border-neutral-300 text-neutral-900 placeholder:text-neutral-400 focus:border-black";
+
   return (
     <div className={`space-y-2 w-full ${className}`}>
       <div className="flex items-center justify-between select-none">
         <label
           htmlFor={name}
-          className="text-[11px] sm:text-xs font-mono tracking-wider text-neutral-800 uppercase"
+          className={`text-[11px] sm:text-xs font-mono tracking-wider uppercase ${labelColor}`}
         >
           {label}
         </label>
         {optional && (
-          <span className="text-[11px] sm:text-xs font-mono tracking-wider text-neutral-400 uppercase">
+          <span className={`text-[11px] sm:text-xs font-mono tracking-wider uppercase ${optionalColor}`}>
             OPTIONAL
           </span>
         )}
@@ -53,7 +61,7 @@ export default function CustomInputField({
           onChange={onChange}
           required={required}
           placeholder={placeholder}
-          className="w-full bg-white border border-neutral-300 p-4 text-neutral-900 font-mg12-regular text-sm rounded-none outline-none focus:border-black transition-colors resize-y min-h-[140px]"
+          className={`w-full border p-4 font-mg12-regular text-sm rounded-none outline-none transition-colors resize-y min-h-[140px] ${fieldBase}`}
         />
       ) : (
         <input
@@ -64,7 +72,7 @@ export default function CustomInputField({
           onChange={onChange}
           required={required}
           placeholder={placeholder}
-          className="w-full bg-white border border-neutral-300 px-4 py-3 text-neutral-900 font-mg12-regular text-sm rounded-none outline-none focus:border-black transition-colors"
+          className={`w-full border px-4 py-3 font-mg12-regular text-sm rounded-none outline-none transition-colors ${fieldBase}`}
         />
       )}
     </div>

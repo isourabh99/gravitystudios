@@ -137,7 +137,7 @@ export default function AlternatingItemView({
         onPointerLeave={handleMouseLeave}
         className="group relative cursor-none outline-none transition-all duration-300 active:scale-[0.98] pointer-events-auto"
       >
-        <div className="w-[350px] sm:w-[400px] md:w-[440px] h-[220px] sm:h-[235px] md:h-[245px] bg-[#0A0B0E] text-white p-3.5 sm:p-4 border border-neutral-800 rounded-md shadow-2xl relative select-none flex flex-col justify-between overflow-hidden group-hover:border-[#ED3327] group-hover:shadow-[0_12px_45px_rgba(237,51,39,0.22)] transition-all duration-300">
+        <div className="w-[350px] sm:w-[400px] md:w-[440px] h-[220px] sm:h-[235px] md:h-[245px] bg-[#0A0B0E] text-white p-3.5 sm:p-4 border border-neutral-800 rounded-none shadow-2xl relative select-none flex flex-col justify-between overflow-hidden group-hover:border-[#ED3327] group-hover:shadow-[0_12px_45px_rgba(237,51,39,0.22)] transition-all duration-300">
           
           {/* Top Row: Service Number & Category Tag */}
           <div className="flex items-center justify-between pb-1.5 border-b border-neutral-800/80 shrink-0">
@@ -151,7 +151,7 @@ export default function AlternatingItemView({
               </span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ED3327] animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-none bg-[#ED3327] animate-pulse" />
               <span className="font-mono text-[8px] sm:text-[8.5px] text-neutral-400 uppercase tracking-wider">
                 DOSSIER
               </span>
@@ -159,7 +159,7 @@ export default function AlternatingItemView({
           </div>
 
           {/* Panoramic Visible 16:9 Image Banner */}
-          <div className="relative w-full h-28 sm:h-31 md:h-33 rounded-xs overflow-hidden my-2 border border-neutral-800 group-hover:border-neutral-600 transition-colors shadow-md shrink-0">
+          <div className="relative w-full h-28 sm:h-31 md:h-33 rounded-none overflow-hidden my-2 border border-neutral-800 group-hover:border-neutral-600 transition-colors shadow-md shrink-0">
             <Image
               src={item.imageUrl}
               alt={item.imageAlt}
@@ -173,7 +173,7 @@ export default function AlternatingItemView({
             
             {/* Subtle Subtitle Pill over image */}
             <div className="absolute bottom-1.5 left-2 right-2 flex items-center justify-between text-[8px] sm:text-[8.5px] font-mono text-white/90 pointer-events-none">
-              <span className="truncate max-w-[85%] font-medium uppercase tracking-wider bg-black/65 backdrop-blur-xs px-2 py-0.5 rounded-2xs border border-white/10">
+              <span className="truncate max-w-[85%] font-medium uppercase tracking-wider bg-black/65 backdrop-blur-xs px-2 py-0.5 rounded-none border border-white/10">
                 {item.subtitle}
               </span>
               <span className="text-white text-xs group-hover:text-[#ED3327] group-hover:translate-x-0.5 transition-all">

@@ -257,7 +257,7 @@ function ClientCard({ client, onOpenCaseStudy, isMobile }: ClientCardProps) {
             <span className="border-b border-neutral-700 group-hover/btn:border-[#ED3327] pb-0.5">
               Read the case study
             </span>
-            <span className="w-4 h-4 rounded-full bg-[#ED3327] text-white flex items-center justify-center text-[9px] group-hover/btn:scale-110 transition-transform">
+            <span className="w-4 h-4 rounded-none bg-[#ED3327] text-white flex items-center justify-center text-[9px] group-hover/btn:scale-110 transition-transform">
               ↗
             </span>
           </button>

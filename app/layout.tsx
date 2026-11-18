@@ -4,7 +4,10 @@ import "./globals.css";
 import UniversalLoaderWrapper from "@/components/loader/UniversalLoaderWrapper";
 import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+import MetaPixel from "@/components/analytics/MetaPixel";
+import ScrollRestoration from "@/components/providers/ScrollRestoration";
 import { Analytics } from "@vercel/analytics/next";
+import { getCMSStore } from "@/lib/cms/store";
 
 const mg12Bold = localFont({
   src: "./fonts/mg12-bold.woff2",
@@ -91,42 +94,55 @@ export const metadata: Metadata = {
   },
 };
 
-// JSON-LD Structured Data Schema Markup (Google Search Rich Results)
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": `${siteUrl}/#organization`,
-      name: "Gravity Studios",
-      url: siteUrl,
-      description:
-        "Creative studio crafting digital experiences, websites, and real-time 3D interactive applications for forward-thinking brands.",
-      contactPoint: {
-        "@type": "ContactPoint",
-        contactType: "customer support",
-        email: "isourabhsoni99@gmail.com",
-        telephone: "+91-8871795472",
-      },
-      sameAs: [
-        "https://linkedin.com/in/isourabh99",
-        "https://instagram.com/isaurabh_99",
-      ],
-    },
-    {
-      "@type": "WebSite",
-      "@id": `${siteUrl}/#website`,
-      url: siteUrl,
-      name: "Gravity Studios",
-      description: "The Benchmark of Digital Innovation",
-      publisher: {
-        "@id": `${siteUrl}/#organization`,
-      },
-    },
-  ],
-};
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const store = await getCMSStore();
+  const theme = store.theme;
+  const geo = store.geo;
+  const tracking = store.tracking;
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Dynamic JSON-LD Structured Data Schema Markup (Google Search Rich Results + GEO)
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": geo.schemaType || "Person",
+        "@id": `${siteUrl}/#developer`,
+        name: geo.developerName || "Sourabh Soni",
+        jobTitle: geo.primaryRole || "Lead WebGL Engineer",
+        description: geo.specializationSummary,
+        knowsAbout: geo.expertiseTags || [],
+        sameAs: [geo.githubUrl, geo.linkedinUrl, geo.twitterUrl].filter(Boolean),
+      },
+      {
+        "@type": "Organization",
+        "@id": `${siteUrl}/#organization`,
+        name: geo.studioName || "Gravity Studios",
+        url: siteUrl,
+        description: geo.aiReadableSummary || "Creative studio crafting digital experiences, websites, and real-time 3D interactive applications for forward-thinking brands.",
+        contactPoint: {
+          "@type": "ContactPoint",
+          contactType: "customer support",
+          email: store.branding.contactEmail || "isourabhsoni99@gmail.com",
+          telephone: store.branding.contactPhone || "+91-8871795472",
+        },
+        sameAs: [
+          geo.linkedinUrl || "https://linkedin.com/in/isourabh99",
+          geo.instagramUrl || "https://instagram.com/isaurabh_99",
+        ],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${siteUrl}/#website`,
+        url: siteUrl,
+        name: geo.studioName || "Gravity Studios",
+        description: "The Benchmark of Digital Innovation",
+        publisher: {
+          "@id": `${siteUrl}/#organization`,
+        },
+      },
+    ],
+  };
+
   return (
     <html
       lang="en"
@@ -134,25 +150,39 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <script
+        <link rel="icon" href={store.branding.faviconUrl || "/favicon.svg"} type="image/svg+xml" />
+
+        {/* Dynamic Theme Color Injection */}
+        <style
           dangerouslySetInnerHTML={{
             __html: `
-              if (typeof window !== 'undefined' && 'scrollRestoration' in history) {
-                history.scrollRestoration = 'manual';
+              :root {
+                --background: ${theme.background || "#000000"};
+                --foreground: ${theme.foreground || "#F4F4F0"};
+                --accent-color: ${theme.accentColor || "#ED3327"};
+                --button-bg: ${theme.buttonBgColor || "#000000"};
+                --button-text: ${theme.buttonTextColor || "#FFFFFF"};
+                --button-hover-bg: ${theme.buttonHoverBg || "#ED3327"};
+                --scramble-hover: ${theme.scrambleHoverColor || "#ED3327"};
               }
-              window.scrollTo(0, 0);
             `,
           }}
         />
+
+        {/* JSON-LD Structured Data Schema Markup */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <GoogleAnalytics />
-        <Analytics />
+        <ScrollRestoration />
+        <GoogleAnalytics gaId={tracking.googleAnalyticsId} />
+        <MetaPixel pixelId={tracking.metaPixelEnabled ? tracking.metaPixelId : undefined} />
+        {tracking.vercelAnalyticsEnabled && <Analytics />}
+        {tracking.customHeadScripts && (
+          <div dangerouslySetInnerHTML={{ __html: tracking.customHeadScripts }} />
+        )}
         <SmoothScrollProvider>
           <UniversalLoaderWrapper>
             {children}

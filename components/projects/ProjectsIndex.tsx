@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { PROJECTS, Project } from "@/data/projectsData";
 import ProjectsHeroBanner from "@/components/projects/ProjectsHeroBanner";
 import ViewModeToggle from "@/components/projects/ViewModeToggle";
@@ -9,11 +9,29 @@ import ProjectGridCard from "@/components/projects/ProjectGridCard";
 import ProjectDetailDrawer from "@/components/projects/ProjectDetailDrawer";
 import CtaButton from "@/components/ui/CtaButton";
 
-export default function ProjectsIndex() {
+export default function ProjectsIndex({
+  initialProjects,
+}: {
+  initialProjects?: Project[];
+}) {
+  const [projectsList, setProjectsList] = useState<Project[]>(initialProjects || PROJECTS);
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeProjectNumber, setActiveProjectNumber] = useState<string>("01");
   const indexSectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!initialProjects) {
+      fetch("/api/cms/projects")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.success && data?.projects?.length > 0) {
+            setProjectsList(data.projects);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [initialProjects]);
 
   const scrollToExplore = () => {
     if (indexSectionRef.current) {
@@ -25,6 +43,7 @@ export default function ProjectsIndex() {
     <div className="relative w-full">
       {/* 1. 100VH DARK HERO BANNER (Vector dots, live clock, scramble headline, 3D wave video slides) */}
       <ProjectsHeroBanner
+        projects={projectsList}
         onSelectProject={setSelectedProject}
         onExploreClick={scrollToExplore}
       />
@@ -39,7 +58,7 @@ export default function ProjectsIndex() {
           {/* CONTROL BAR & VIEW SWITCHER (List vs Grid) */}
           <div className="py-6 sm:py-8 flex items-center justify-between border-b border-neutral-300">
             <span className="font-mono text-xs sm:text-[13px] tracking-[0.2em] text-neutral-500 uppercase">
-              INDEX · 08 PROJECTS
+              INDEX · {String(projectsList.length).padStart(2, "0")} PROJECTS
             </span>
 
             <div className="flex items-center gap-3">
@@ -56,9 +75,9 @@ export default function ProjectsIndex() {
         {viewMode === "list" ? (
           /* ================= LIST VIEW (Matches Junca Screenshots) ================= */
           <div className="divide-y divide-neutral-300 border-b border-neutral-300">
-            {PROJECTS.map((project) => (
+            {projectsList.map((project) => (
               <ProjectListRow
-                key={project.number}
+                key={project.number || project.slug}
                 project={project}
                 isActive={activeProjectNumber === project.number}
                 onActivate={() => setActiveProjectNumber(project.number)}
@@ -69,9 +88,9 @@ export default function ProjectsIndex() {
         ) : (
           /* ================= GRID VIEW ================= */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 py-10 border-b border-neutral-300">
-            {PROJECTS.map((project) => (
+            {projectsList.map((project) => (
               <ProjectGridCard
-                key={project.number}
+                key={project.number || project.slug}
                 project={project}
                 onSelect={setSelectedProject}
               />

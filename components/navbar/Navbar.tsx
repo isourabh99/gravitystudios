@@ -23,9 +23,10 @@ export default function Navbar() {
     const hash = window.location.hash;
     if (pathname?.startsWith("/projects") || hash === "#projects") setActiveItem("Projects");
     else if (pathname === "/services" || hash === "#services") setActiveItem("Services");
-    else if (hash === "#industries") setActiveItem("Industries");
-    else if (hash === "#studio") setActiveItem("Studio");
-    else if (hash === "#news") setActiveItem("News");
+    else if (pathname === "/industries" || hash === "#industries") setActiveItem("Industries");
+    else if (pathname === "/studio" || hash === "#studio") setActiveItem("Studio");
+    else if (pathname === "/news" || hash === "#news") setActiveItem("News");
+    else if (pathname?.startsWith("/blogs")) setActiveItem("Blogs");
     else if (pathname === "/contact") setActiveItem("Contact");
     else setActiveItem("Home");
   }, [pathname, menuOpen]);
@@ -46,7 +47,7 @@ export default function Navbar() {
       }
 
       // Contact and Services pages start with light theme
-      if (pathname?.startsWith("/contact") || pathname?.startsWith("/services")) {
+      if (pathname?.startsWith("/contact") || pathname?.startsWith("/services") || pathname?.startsWith("/blogs") || pathname?.startsWith("/news") || pathname?.startsWith("/industries") || pathname?.startsWith("/studio")) {
         setIsDarkBg(false);
         return;
       }
@@ -138,7 +139,7 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Fixed Main Header matching Screenshot 1 */}
+      {/* Fixed Main Header - Transparent Background */}
       <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-12 py-6 select-none pointer-events-none transition-colors duration-300">
         <nav className="max-w-8xl mx-auto flex items-start justify-between">
           {/* Top Left Logo (Adapts to black on light backgrounds, white on dark backgrounds) */}
@@ -149,23 +150,25 @@ export default function Navbar() {
           {/* Center 2-Column Links Layout (Slides up & fades out on scroll, color adapts to background) */}
           <motion.div
             style={{ y: linksY, opacity: linksOpacity }}
-            className={`hidden md:flex items-start gap-14 lg:gap-16 text-sm sm:text-[15px] font-mg12-regular font-light transition-colors duration-300 pointer-events-auto ${isDarkBg ? "text-neutral-300" : "text-neutral-700"
-              }`}
+            className={`hidden md:flex items-start gap-14 lg:gap-16 text-sm sm:text-[15px] font-mg12-regular font-light transition-colors duration-300 pointer-events-auto ${
+              isDarkBg ? "text-neutral-300" : "text-neutral-700"
+            }`}
           >
             {/* Column 1 */}
             <div className="flex flex-col space-y-2">
               {[
                 { name: "Projects", href: "/projects" },
-                { name: "Studio", href: "/#studio" },
+                { name: "Studio", href: "/studio" },
                 { name: "Services", href: "/services" },
               ].map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`inline-block transition-colors duration-200 ${isDarkBg
+                  className={`inline-block transition-colors duration-200 ${
+                    isDarkBg
                       ? "text-neutral-300 hover:text-white"
                       : "text-neutral-700 hover:text-black"
-                    }`}
+                  }`}
                 >
                   {link.name}
                 </Link>
@@ -175,17 +178,18 @@ export default function Navbar() {
             {/* Column 2 */}
             <div className="flex flex-col space-y-2">
               {[
-                { name: "News", href: "/#news" },
-                { name: "Industries", href: "/#industries" },
+                { name: "Blogs", href: "/blogs" },
+                { name: "Industries", href: "/industries" },
                 { name: "Contact", href: "/contact" },
               ].map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`inline-block transition-colors duration-200 ${isDarkBg
+                  className={`inline-block transition-colors duration-200 ${
+                    isDarkBg
                       ? "text-neutral-300 hover:text-white"
                       : "text-neutral-700 hover:text-black"
-                    }`}
+                  }`}
                 >
                   {link.name}
                 </Link>
@@ -197,17 +201,20 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
-            className={`group p-2 -mr-2 flex flex-col items-end justify-center gap-1.5 cursor-pointer focus:outline-none transition-colors duration-300 pointer-events-auto ${isDarkBg ? "text-white" : "text-black"
-              }`}
+            className={`group p-2 -mr-2 flex flex-col items-end justify-center gap-1.5 cursor-pointer focus:outline-none transition-colors duration-300 pointer-events-auto ${
+              isDarkBg ? "text-white" : "text-black"
+            }`}
             aria-label="Open Navigation Menu"
           >
             <span
-              className={`w-6 h-[1.5px] transition-all duration-300 ${isDarkBg ? "bg-white" : "bg-black"
-                }`}
+              className={`w-6 h-[1.5px] transition-all duration-300 ${
+                isDarkBg ? "bg-white" : "bg-black"
+              }`}
             />
             <span
-              className={`w-6 h-[1.5px] transition-all duration-300 group-hover:scale-x-50 origin-center ${isDarkBg ? "bg-white" : "bg-black"
-                }`}
+              className={`w-6 h-[1.5px] transition-all duration-300 group-hover:scale-x-50 origin-center ${
+                isDarkBg ? "bg-white" : "bg-black"
+              }`}
             />
           </button>
         </nav>
@@ -226,7 +233,7 @@ export default function Navbar() {
               className="fixed inset-0 z-[90] bg-black/80 backdrop-blur-sm cursor-pointer"
             />
 
-            {/* Popup Menu */}
+            {/* Popup Menu Box */}
             <motion.aside
               initial={{ opacity: 0, scale: 0.15, transformOrigin: "top right" }}
               animate={{ opacity: 1, scale: 1, transformOrigin: "top right" }}
@@ -250,9 +257,10 @@ export default function Navbar() {
                   { name: "Home", href: "/" },
                   { name: "Projects", href: "/projects" },
                   { name: "Services", href: "/services" },
-                  { name: "Industries", href: "/#industries" },
-                  { name: "Studio", href: "/#studio" },
-                  { name: "News", href: "/#news" },
+                  { name: "Industries", href: "/industries" },
+                  { name: "Studio", href: "/studio" },
+                  { name: "Blogs", href: "/blogs" },
+                  { name: "News", href: "/news" },
                   { name: "Contact", href: "/contact" },
                 ].map((item) => {
                   const isActive = activeItem === item.name;
@@ -264,15 +272,17 @@ export default function Navbar() {
                           setActiveItem(item.name);
                           setMenuOpen(false);
                         }}
-                        className={`group relative inline-flex items-center text-3xl sm:text-4xl md:text-[42px] leading-[1.18] font-mg12-regular font-light tracking-tight transition-colors duration-200 ${isActive ? "text-neutral-500" : "text-neutral-900"
-                          }`}
+                        className={`group relative inline-flex items-center text-3xl sm:text-4xl md:text-[42px] leading-[1.18] font-mg12-regular font-light tracking-tight transition-colors duration-200 ${
+                          isActive ? "text-neutral-500" : "text-neutral-900"
+                        }`}
                       >
                         <span className="relative inline-block transition-transform duration-300 ease-out group-hover:translate-x-3">
                           {item.name}
                           {/* Thin linear underline starting from LEFT */}
                           <span
-                            className={`absolute -bottom-0.5 left-0 w-full h-[1.5px] ${isActive ? "bg-neutral-500" : "bg-neutral-900"
-                              } origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-linear pointer-events-none`}
+                            className={`absolute -bottom-0.5 left-0 w-full h-[1.5px] ${
+                              isActive ? "bg-neutral-500" : "bg-neutral-900"
+                            } origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-linear pointer-events-none`}
                           />
                         </span>
                       </Link>
